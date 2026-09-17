@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Anggota</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col justify-between hidden md:flex">
+      <div>
+        <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
+          <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">A</div>
+          <span class="text-xl font-bold tracking-wide">Portal Anggota</span>
+        </div>
+        <nav class="p-4 space-y-2">
+          <button onclick="switchTab('home')" id="nav-home" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600 text-white transition font-medium">
+            <i class="fa-solid fa-chart-pie w-5"></i><span>Dashboard</span>
+          </button>
+          <button onclick="switchTab('saldo')" id="nav-saldo" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
+            <i class="fa-solid fa-wallet w-5"></i><span>Saldo & Keuangan</span>
+          </button>
+        </nav>
+      </div>
+      <div class="p-4 border-t border-slate-800">
+        <button id="btnLogout" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition font-medium">
+          <i class="fa-solid fa-right-from-bracket w-5"></i><span>Keluar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- AREA UTAMA -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+      <header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+        <div>
+          <h1 class="text-xl font-bold text-gray-800" id="headerTitle">Dashboard Utama</h1>
+          <p class="text-xs text-gray-500">Kelola catatan transaksi anggota Anda</p>
+        </div>
+        <div class="text-right">
+          <p id="userNameDisplay" class="text-sm font-semibold text-gray-800">Memuat...</p>
+          <p id="userEmailDisplay" class="text-xs text-gray-500">Memuat...</p>
+        </div>
+      </header>
+
+      <main class="p-6 md:p-8 max-w-6xl w-full mx-auto space-y-6">
+        <!-- TAB DASHBOARD -->
+        <div id="tab-home" class="space-y-6">
+          <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg flex justify-between items-center">
+            <div>
+              <p class="text-blue-100 text-sm">Total Saldo Aktif Saat Ini</p>
+              <h3 class="text-3xl font-extrabold mt-1" id="totalSaldoDisplay">Rp 0</h3>
+            </div>
+            <button onclick="openModal()" class="bg-white text-blue-600 font-bold px-4 py-2 rounded-xl text-sm hover:bg-blue-50 transition">+ Catat Keuangan</button>
+          </div>
+        </div>
+
+        <!-- TAB SALDO & KEUANGAN -->
+        <div id="tab-saldo" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-800">Riwayat Transaksi</h3>
+            <button onclick="openModal()" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-blue-700 transition">+ Tambah Transaksi Baru</button>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="text-gray-400 border-b pb-3 text-xs">
+                  <th class="pb-3">KETERANGAN</th>
+                  <th class="pb-3">TIPE</th>
+                  <th class="pb-3 text-right">JUMLAH</th>
+                </tr>
+              </thead>
+              <tbody id="transactionList" class="divide-y divide-gray-100">
+                <tr><td colspan="3" class="py-4 text-center text-gray-400">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL FORM INPUT TRANSAKSI -->
+  <div id="modalTransaksi" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
+      <h3 class="text-lg font-bold text-gray-800">Tambah Transaksi</h3>
+      <form id="formTx" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Jenis Transaksi</label>
+          <select id="txTipe" class="w-full border rounded-xl p-2.5 text-sm">
+            <option value="masuk">Uang Masuk (+)</option>
+            <option value="keluar">Uang Keluar (-)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Keterangan</label>
+          <input type="text" id="txKet" placeholder="Contoh: Iuran Bulanan / Beli Perlengkapan" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Jumlah (Rp)</label>
+          <input type="number" id="txJumlah" placeholder="50000" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button type="button" onclick="closeModal()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
+          <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co"; 
+    const SUPABASE_ANON_KEY = "sb_publishable_XgB1KWcve2v-30R7PbbPew_oRaxz4WG";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUser = null;
+
+    async function checkAuth() {
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (!session) { window.location.href = "login.html"; } 
+      else {
+        currentUser = session.user;
+        document.getElementById('userEmailDisplay').innerText = currentUser.email;
+        document.getElementById('userNameDisplay').innerText = currentUser.email.split('@')[0];
+        loadTransactions();
+      }
+    }
+    checkAuth();
+
+    async function loadTransactions() {
+      const { data, error } = await _supabase.from('transaksi').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      if (error) return;
+
+      let total = 0;
+      let html = '';
+
+      if (data.length === 0) {
+        html = '<tr><td colspan="3" class="py-4 text-center text-gray-400">Belum ada transaksi</td></tr>';
+      } else {
+        data.forEach(tx => {
+          const isMasuk = tx.tipe === 'masuk';
+          if (isMasuk) total += Number(tx.jumlah);
+          else total -= Number(tx.jumlah);
+
+          html += `
+            <tr>
+              <td class="py-3 font-semibold text-gray-800">${tx.keterangan}</td>
+              <td class="py-3"><span class="${isMasuk ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} text-xs px-2.5 py-0.5 rounded-full font-medium">${isMasuk ? 'Masuk' : 'Keluar'}</span></td>
+              <td class="py-3 text-right font-bold ${isMasuk ? 'text-emerald-600' : 'text-rose-600'}">${isMasuk ? '+' : '-'} Rp ${Number(tx.jumlah).toLocaleString('id-ID')}</td>
+            </tr>
+          `;
+        });
+      }
+
+      document.getElementById('totalSaldoDisplay').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+      document.getElementById('transactionList').innerHTML = html;
+    }
+
+    document.getElementById('formTx').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const tipe = document.getElementById('txTipe').value;
+      const keterangan = document.getElementById('txKet').value;
+      const jumlah = document.getElementById('txJumlah').value;
+
+      await _supabase.from('transaksi').insert([{ user_id: currentUser.id, tipe, keterangan, jumlah }]);
+      closeModal();
+      document.getElementById('formTx').reset();
+      loadTransactions();
+    });
+
+    function openModal() { document.getElementById('modalTransaksi').classList.remove('hidden'); document.getElementById('modalTransaksi').classList.add('flex'); }
+    function closeModal() { document.getElementById('modalTransaksi').classList.add('hidden'); document.getElementById('modalTransaksi').classList.remove('flex'); }
+
+    function switchTab(tab) {
+      document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
+      document.getElementById('tab-saldo').classList.toggle('hidden', tab !== 'saldo');
+      document.getElementById('nav-home').className = tab === 'home' ? 'w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600 text-white font-medium' : 'w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white font-medium';
+      document.getElementById('nav-saldo').className = tab === 'saldo' ? 'w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600 text-white font-medium' : 'w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white font-medium';
+    }
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await _supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
