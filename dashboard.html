@@ -5,1189 +5,186 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Superapp - The Circle Hub Indonesia</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Supabase JS -->
+  <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Library Scanner Barcode/QR Kamera -->
-  <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
-<body class="bg-gray-100 font-sans antialiased pb-20 md:pb-0">
+<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
 
-  <div class="flex h-screen overflow-hidden">
-    <!-- SIDEBAR NAVIGASI (Desktop) -->
-    <aside class="w-64 bg-slate-900 text-white flex-col justify-between hidden md:flex">
+  <!-- Sidebar Navigation -->
+  <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0">
+    <div class="p-6 flex items-center gap-3 border-b border-slate-800">
+      <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-blue-500/30">
+        C
+      </div>
       <div>
-        <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
-          <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">C</div>
-          <span class="text-xl font-bold tracking-wide">The Circle Hub</span>
-        </div>
-        <nav class="p-4 space-y-2">
-          <button onclick="switchTab('home')" id="nav-home" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600 text-white transition font-medium">
-            <i class="fa-solid fa-house w-5"></i><span>Beranda Utama</span>
-          </button>
-          <button onclick="switchTab('saldo')" id="nav-saldo" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
-            <i class="fa-solid fa-wallet w-5"></i><span>Kas & Transaksi</span>
-          </button>
-          <button onclick="switchTab('pendapatan')" id="nav-pendapatan" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
-            <i class="fa-solid fa-chart-pie w-5"></i><span>Laporan Keuangan</span>
-          </button>
-          <button onclick="switchTab('umkm')" id="nav-umkm" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
-            <i class="fa-solid fa-store w-5"></i><span>Grup UMKM</span>
-          </button>
-          <button onclick="switchTab('event')" id="nav-event" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
-            <i class="fa-solid fa-calendar-day w-5"></i><span>Event & Agenda</span>
-          </button>
-          <button onclick="switchTab('profil')" id="nav-profil" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
-            <i class="fa-solid fa-user-gear w-5"></i><span>Profil Anggota</span>
-          </button>
-          <a href="admin.html" id="nav-admin" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-amber-400 hover:bg-slate-800 transition font-medium hidden">
-            <i class="fa-solid fa-user-shield w-5"></i><span>Admin Panel</span>
-          </a>
-        </nav>
+        <h1 class="font-bold text-lg tracking-wide">The Circle Hub</h1>
+        <p class="text-[10px] text-slate-400">Komunitas Indonesia</p>
       </div>
-      <div class="p-4 border-t border-slate-800">
-        <button id="btnLogout" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition font-medium">
-          <i class="fa-solid fa-right-from-bracket w-5"></i><span>Keluar</span>
-        </button>
-      </div>
-    </aside>
+    </div>
 
-    <!-- AREA UTAMA -->
-    <div class="flex-1 flex flex-col overflow-y-auto">
-      <!-- HEADER UPPER BAR -->
-      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-        <div class="flex items-center space-x-3">
-          <div id="avatarHeader" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow overflow-hidden">
-            <i class="fa-solid fa-user"></i>
+    <nav class="p-4 space-y-1.5 text-sm font-medium">
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/20">
+        <span>🏠</span> Beranda Utama
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <span>💼</span> Kas & Transaksi
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <span>📊</span> Laporan Keuangan
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <span>🏪</span> Grup UMKM
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <span>📅</span> Event & Agenda
+      </a>
+      <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition">
+        <span>👤</span> Profil Anggota
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800 mt-auto">
+      <button id="btnLogout" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-rose-400 hover:bg-rose-500/10 transition font-medium text-sm">
+        <span>🚪</span> Keluar
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 p-4 md:p-8 overflow-y-auto space-y-6">
+    
+    <!-- Top Header Profile Info -->
+    <header class="flex items-center justify-between bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">
+          👤
+        </div>
+        <div>
+          <h2 id="userName" class="font-bold text-slate-800 text-base md:text-lg">Memuat...</h2>
+          <span id="userRole" class="inline-block text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full">
+            Anggota Aktif
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Ringkasan Kas / Informasi Keuangan -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-amber-500 space-y-2">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Kas Abadi & Simpanan Emergency</h3>
+        <p class="text-2xl font-extrabold text-slate-800">Rp 500</p>
+        <p class="text-xs text-slate-500">Kas abadi & dana simpanan darurat komunitas</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-500 space-y-2">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operational & System Fund</h3>
+        <p class="text-2xl font-extrabold text-slate-800">Rp 500</p>
+        <p class="text-xs text-slate-500">Biaya pemeliharaan sistem, server & administrasi</p>
+      </div>
+    </section>
+
+    <!-- Catatan Transaksi Pemasukan Komunitas -->
+    <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-4">
+      <div>
+        <h3 class="text-base font-bold text-slate-800">Catatan Transaksi Pemasukan Komunitas</h3>
+        <p class="text-xs text-slate-500">Data publik transaksi kas terverifikasi oleh pengurus</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <th class="py-3 px-2">Tanggal</th>
+              <th class="py-3 px-2">Keterangan Pemasukan</th>
+              <th class="py-3 px-2">Total (100%)</th>
+              <th class="py-3 px-2 text-rose-500">Santunan (15%)</th>
+              <th class="py-3 px-2 text-blue-600">Fleksibel (55%)</th>
+            </tr>
+          </thead>
+          <tbody class="text-xs font-medium text-slate-700 divide-y divide-slate-50">
+            <tr>
+              <td class="py-3.5 px-2 text-slate-500">17 Sep 2026</td>
+              <td class="py-3.5 px-2 font-bold text-slate-800">Iuran Sukarela Harian (Rp 10.000)</td>
+              <td class="py-3.5 px-2 text-emerald-600 font-bold">+ Rp 10.000</td>
+              <td class="py-3.5 px-2 text-rose-500 font-semibold">Rp 1.500</td>
+              <td class="py-3.5 px-2 text-blue-600 font-semibold">Rp 5.500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- KARTU RINGKASAN TOTAL ANGGOTA TERDAFTAR (Ganti Tabel) -->
+    <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-inner">
+            👥
           </div>
           <div>
-            <h1 class="text-sm font-bold text-gray-800" id="userNameDisplay">Memuat...</h1>
-            <p class="text-xs text-blue-600 font-semibold" id="userRoleDisplay">Anggota Aktif</p>
+            <h3 class="text-base font-bold text-slate-800">Total Anggota Komunitas Terdaftar</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Seluruh jaringan anggota aktif The Circle Hub Indonesia</p>
           </div>
         </div>
-        <div class="flex items-center space-x-3">
-          <button onclick="openCameraScanner()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200" title="Scan Kamera Barcode">
-            <i class="fa-solid fa-camera"></i>
-          </button>
+        <div class="text-center sm:text-right bg-blue-50/50 sm:bg-transparent px-6 py-3 sm:p-0 rounded-xl w-full sm:w-auto">
+          <span id="totalAnggotaCount" class="text-3xl font-extrabold text-blue-600 block">0</span>
+          <span class="text-xs font-semibold text-slate-500">Anggota Aktif</span>
         </div>
-      </header>
-
-      <main class="p-4 md:p-8 max-w-4xl w-full mx-auto space-y-6">
-
-        <!-- TAB 1: BERANDA SUPERAPP -->
-        <div id="tab-home" class="space-y-6">
-          
-          <!-- KARTU SALDO & POIN -->
-          <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 rounded-2xl p-5 text-white shadow-lg space-y-4">
-            <div class="flex justify-between items-center">
-              <div>
-                <p class="text-blue-200 text-xs font-medium">Saldo Utama Anggota</p>
-                <h3 class="text-3xl font-extrabold tracking-tight" id="totalSaldoDisplay">Rp 0</h3>
-              </div>
-              <div class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 text-xs text-blue-100 flex items-center space-x-1">
-                <i class="fa-solid fa-coins text-amber-300"></i>
-                <span id="userPoinDisplay">100 Poin</span>
-              </div>
-            </div>
-
-            <!-- GRID 4 TOMBOL -->
-            <div class="grid grid-cols-4 gap-2 pt-2 border-t border-white/15 text-center text-xs">
-              <button onclick="openModalTransfer()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
-                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-paper-plane"></i></div>
-                <span>Transfer</span>
-              </button>
-              <button onclick="openCameraScanner()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
-                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-expand"></i></div>
-                <span>Scan QR</span>
-              </button>
-              <button onclick="switchTab('saldo')" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
-                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-list-check"></i></div>
-                <span>Riwayat</span>
-              </button>
-              <button onclick="openModalQris()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
-                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
-                <span>Top Up</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- CARD PROGRAM JUARA -->
-          <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-600 rounded-2xl p-5 text-white shadow-md space-y-4">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="bg-white/20 text-[10px] font-extrabold tracking-wider px-2.5 py-1 rounded-full uppercase">Program Unggulan TCHI</span>
-                <h3 class="text-xl font-black mt-2 flex items-center gap-2">
-                  <i class="fa-solid fa-trophy text-yellow-200"></i> Program JUARA
-                </h3>
-                <p class="text-xs text-amber-100 mt-1">Jaringan Unik Anggota & Roda Akselerasi Ekonomi</p>
-              </div>
-              <div class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 text-center">
-                <p class="text-[10px] text-amber-200 uppercase font-semibold">Tingkat Anda</p>
-                <p class="text-sm font-bold text-yellow-300"><i class="fa-solid fa-crown mr-1"></i>JUARA Bronze</p>
-              </div>
-            </div>
-
-            <!-- PROGRESS BAR BADGE & POIN -->
-            <div class="bg-black/20 rounded-xl p-3 border border-white/10 space-y-2">
-              <div class="flex justify-between text-xs font-semibold">
-                <span>Progres Roda Akselerasi</span>
-                <span class="text-yellow-200" id="juaraPoinText">100 / 300 Poin</span>
-              </div>
-              <div class="w-full bg-white/20 h-2.5 rounded-full overflow-hidden">
-                <div class="bg-yellow-300 h-full rounded-full" style="width: 33%;"></div>
-              </div>
-              <p class="text-[11px] text-amber-100">Kumpulkan 200 Poin lagi untuk naik ke level <strong>JUARA Silver</strong>!</p>
-            </div>
-
-            <!-- BENEFIT & EMPAT PILAR -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 text-center text-xs">
-              <div class="bg-white/10 rounded-xl p-2 border border-white/10">
-                <i class="fa-solid fa-shield-halved text-lg text-yellow-200 mb-1"></i>
-                <p class="font-bold">Perlindungan</p>
-                <p class="text-[10px] text-amber-100">Subsidi BPJS</p>
-              </div>
-              <div class="bg-white/10 rounded-xl p-2 border border-white/10">
-                <i class="fa-solid fa-sack-dollar text-lg text-yellow-200 mb-1"></i>
-                <p class="font-bold">Modal UMKM</p>
-                <p class="text-[10px] text-amber-100">Dana Usaha</p>
-              </div>
-              <div class="bg-white/10 rounded-xl p-2 border border-white/10">
-                <i class="fa-solid fa-gift text-lg text-yellow-200 mb-1"></i>
-                <p class="font-bold">Bonus Harian</p>
-                <p class="text-[10px] text-amber-100">Cashback Saldo</p>
-              </div>
-              <div class="bg-white/10 rounded-xl p-2 border border-white/10">
-                <i class="fa-solid fa-graduation-cap text-lg text-yellow-200 mb-1"></i>
-                <p class="font-bold">Pelatihan</p>
-                <p class="text-[10px] text-amber-100">Sertifikasi</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- KARTU MODUL IURAN HARIAN -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-              <div>
-                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">Iuran Harian Komunitas</span>
-                <h3 class="text-sm font-bold text-gray-800 mt-1">Status Pembayaran Hari Ini</h3>
-              </div>
-              <div id="statusBadgeHariIni">
-                <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
-              </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
-              <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold shadow">
-                  <i class="fa-solid fa-hand-holding-dollar"></i>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500">Nominal Iuran Pokok</p>
-                  <p class="text-lg font-extrabold text-gray-800">Rp 10.000 <span class="text-xs font-normal text-gray-500">/ hari</span></p>
-                  <p class="text-[11px] text-emerald-600 font-medium">Potong Saldo Utama & +10 Poin</p>
-                </div>
-              </div>
-              <button id="btnBayarIuranCepat" onclick="bayarIuranHarianCepat()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-bolt"></i>
-                <span>Bayar Iuran (1-Klik)</span>
-              </button>
-            </div>
-
-            <!-- PELACAK 7 HARI TERAKHIR -->
-            <div>
-              <p class="text-xs font-semibold text-gray-500 mb-2">Rekam Iuran 7 Hari Terakhir</p>
-              <div id="tracker7Hari" class="grid grid-cols-7 gap-1.5 text-center">
-                <!-- Generasi Otomatis via JS -->
-              </div>
-            </div>
-          </div>
-
-          <!-- GRID MENU SUPERAPP -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-3">
-            <h2 class="text-sm font-bold text-gray-800 tracking-wide">Layanan & Ekosistem</h2>
-            <div class="grid grid-cols-4 gap-4 text-center">
-              <button onclick="switchTab('saldo')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-wallet"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Kas & Transaksi</span>
-              </button>
-
-              <button onclick="switchTab('pendapatan')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-chart-pie"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Laporan Kas</span>
-              </button>
-
-              <button onclick="switchTab('umkm')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-store"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Grup UMKM</span>
-              </button>
-
-              <button onclick="openModalSolidaritas()" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Kas Solidaritas</span>
-              </button>
-
-              <button onclick="switchTab('event')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-calendar-day"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Event & Agenda</span>
-              </button>
-
-              <button onclick="switchTab('profil')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl group-hover:bg-sky-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-id-card"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Profil Anggota</span>
-              </button>
-
-              <button onclick="openModalQris()" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-qrcode"></i></div>
-                <span class="text-xs text-gray-700 font-medium">QRIS TopUp</span>
-              </button>
-
-              <button onclick="alert('Pusat Bantuan WhatsApp!')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-headset"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Bantuan</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- BANNER PENGUMUMAN -->
-          <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-4 text-white flex justify-between items-center shadow-sm">
-            <div>
-              <span class="bg-white/20 text-xs px-2 py-0.5 rounded font-medium">Program Eco System</span>
-              <h4 class="font-bold text-sm mt-1">From Driver to Hero</h4>
-              <p class="text-xs text-amber-100">Bergabung dalam gerakan kemandirian ekonomi anggota.</p>
-            </div>
-            <i class="fa-solid fa-bullhorn text-3xl opacity-80"></i>
-          </div>
-        </div>
-
-        <!-- TAB 2: KAS & TRANSAKSI SAYA -->
-        <div id="tab-saldo" class="hidden space-y-6">
-          <div class="flex justify-between items-center">
-            <h3 class="text-lg font-bold text-gray-800">Catatan Kas & Transaksi Saya</h3>
-            <button onclick="openModalTransfer()" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-blue-700 transition">+ Kirim Transfer</button>
-          </div>
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <table class="w-full text-left text-sm">
-              <thead>
-                <tr class="text-gray-400 border-b pb-3 text-xs">
-                  <th class="pb-3">KETERANGAN</th>
-                  <th class="pb-3">TIPE</th>
-                  <th class="pb-3 text-right">JUMLAH</th>
-                </tr>
-              </thead>
-              <tbody id="transactionList" class="divide-y divide-gray-100">
-                <tr><td colspan="3" class="py-4 text-center text-gray-400">Memuat data...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TAB 3: LAPORAN KEUANGAN KOMUNITAS & ANGGOTA TERDAFTAR -->
-        <div id="tab-pendapatan" class="hidden space-y-6">
-          
-          <!-- RINGKASAN TOTAL KAS LENGKAP DENGAN FILTER PERIODE -->
-          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-md space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-4">
-              <div>
-                <span class="bg-blue-600/30 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Laporan Resmi Kas Komunitas TCHI</span>
-                <p class="text-xs text-slate-400 mt-1">Dikelola transparan oleh Pengurus Admin TCHI</p>
-              </div>
-
-              <!-- FILTER PERIODE -->
-              <div class="bg-slate-800 p-1 rounded-xl flex space-x-1 text-xs">
-                <button onclick="filterReport('harian')" id="btnFilterHarian" class="px-3 py-1.5 rounded-lg text-slate-300 font-medium hover:text-white transition">Harian</button>
-                <button onclick="filterReport('mingguan')" id="btnFilterMingguan" class="px-3 py-1.5 rounded-lg text-slate-300 font-medium hover:text-white transition">Mingguan</button>
-                <button onclick="filterReport('bulanan')" id="btnFilterBulanan" class="px-3 py-1.5 rounded-lg text-slate-300 font-medium hover:text-white transition">Bulanan</button>
-                <button onclick="filterReport('semua')" id="btnFilterSemua" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold transition">Semua</button>
-              </div>
-            </div>
-
-            <div>
-              <p class="text-xs text-slate-400 font-medium">Total Pemasukan Kas Terfilter</p>
-              <h2 class="text-3xl font-black text-amber-400 mt-1" id="incTotalPemasukan">Rp 0</h2>
-            </div>
-          </div>
-
-          <!-- KARTU RINCIAN PEMBAGIAN ALOKASI DANA OTOMATIS (5 KANTONG) -->
-          <div class="space-y-3">
-            <div class="flex justify-between items-center">
-              <h3 class="text-sm font-bold text-gray-800 tracking-wide">Pembagian Alokasi Kas Otomatis</h3>
-              <span class="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">100% Terdistribusi Presisi</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <!-- 1. FLEKSIBEL (55%) -->
-              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-blue-600">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-gray-500">Akselerasi Fleksibel</span>
-                  <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-md">55%</span>
-                </div>
-                <h4 class="text-xl font-black text-gray-800" id="alokasiFleksibel">Rp 0</h4>
-                <p class="text-[11px] text-gray-400">Modal kerja, pengembangan ekosistem & kegiatan UMKM</p>
-              </div>
-
-              <!-- 2. BAGI HASIL & KUMPUL RUTIN (20%) -->
-              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-purple-600">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-gray-500">Bagi Hasil & Kumpul Rutin</span>
-                  <span class="bg-purple-100 text-purple-700 text-[10px] font-black px-2 py-0.5 rounded-md">20%</span>
-                </div>
-                <h4 class="text-xl font-black text-gray-800" id="alokasiBagiHasil">Rp 0</h4>
-                <p class="text-[11px] text-gray-400">Dividen usaha bulanan & anggaran kumpul rutin anggota</p>
-              </div>
-
-              <!-- 3. SANTUNAN & MUSIBAH (15%) -->
-              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-rose-600">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-gray-500">Santunan & Musibah</span>
-                  <span class="bg-rose-100 text-rose-700 text-[10px] font-black px-2 py-0.5 rounded-md">15%</span>
-                </div>
-                <h4 class="text-xl font-black text-gray-800" id="alokasiSantunan">Rp 0</h4>
-                <p class="text-[11px] text-gray-400">Perlindungan sosial & bantuan darurat musibah anggota</p>
-              </div>
-
-              <!-- 4. CADANGAN MENGENDAP (5%) -->
-              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-amber-500">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-gray-500">Cadangan Mengendap</span>
-                  <span class="bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-0.5 rounded-md">5%</span>
-                </div>
-                <h4 class="text-xl font-black text-gray-800" id="alokasiMengendap">Rp 0</h4>
-                <p class="text-[11px] text-gray-400">Kas abadi & dana simpanan darurat komunitas</p>
-              </div>
-
-              <!-- 5. OPERASIONAL & ADMIN (5%) -->
-              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-slate-600">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-gray-500">Layanan & Operasional</span>
-                  <span class="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded-md">5%</span>
-                </div>
-                <h4 class="text-xl font-black text-gray-800" id="alokasiOperasional">Rp 0</h4>
-                <p class="text-[11px] text-gray-400">Biaya pemeliharaan sistem, server & administrasi</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- TABEL RIWAYAT PEMASUKAN KAS -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
-            <div class="border-b pb-4">
-              <h3 class="text-lg font-bold text-gray-800">Catatan Transaksi Pemasukan Komunitas</h3>
-              <p class="text-xs text-gray-500">Data publik transaksi kas terverifikasi oleh pengurus</p>
-            </div>
-
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-sm">
-                <thead>
-                  <tr class="text-gray-400 border-b pb-3 text-xs uppercase">
-                    <th class="pb-3">TANGGAL</th>
-                    <th class="pb-3">KETERANGAN PEMASUKAN</th>
-                    <th class="pb-3 text-right">TOTAL (100%)</th>
-                    <th class="pb-3 text-right text-rose-600">SANTUNAN (15%)</th>
-                    <th class="pb-3 text-right text-blue-600">FLEKSIBEL (55%)</th>
-                  </tr>
-                </thead>
-                <tbody id="incomeReportList" class="divide-y divide-gray-100">
-                  <tr><td colspan="5" class="py-4 text-center text-gray-400">Memuat laporan keuangan...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- KARTU TAMBAHAN: DAFTAR ANGGOTA TERDAFTAR (MODUL SEPERTI DI ADMIN PANEL) -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b pb-4">
-              <div>
-                <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
-                  <i class="fa-solid fa-users text-blue-600"></i>
-                  Daftar Anggota Komunitas Terdaftar
-                </h3>
-                <p class="text-xs text-gray-500">Seluruh jaringan anggota aktif The Circle Hub Indonesia</p>
-              </div>
-              <span class="bg-blue-50 text-blue-600 font-bold text-xs px-3 py-1 rounded-full border border-blue-100" id="reportTotalUsersCount">0 Anggota</span>
-            </div>
-
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-sm">
-                <thead>
-                  <tr class="text-gray-400 border-b border-gray-100 text-xs uppercase">
-                    <th class="pb-3">ANGGOTA</th>
-                    <th class="pb-3">KONTAK & BISNIS</th>
-                    <th class="pb-3">STATUS DOKUMEN</th>
-                    <th class="pb-3 text-right">POIN REWARD</th>
-                  </tr>
-                </thead>
-                <tbody id="reportUserTableList" class="divide-y divide-gray-100">
-                  <tr><td colspan="4" class="py-4 text-center text-gray-400">Memuat daftar anggota...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- TAB 4: GRUP UMKM -->
-        <div id="tab-umkm" class="hidden space-y-6">
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
-            <div class="flex justify-between items-center border-b pb-4">
-              <div>
-                <h3 class="text-lg font-bold text-gray-800">Program Kemandirian UMKM</h3>
-                <p class="text-xs text-gray-500">Daftarkan usaha atau pengajuan tujuan UMKM Anda</p>
-              </div>
-              <button onclick="openModalUmkm()" class="bg-emerald-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-emerald-700 transition">+ Ajukan UMKM</button>
-            </div>
-            <div class="space-y-3">
-              <h4 class="text-xs font-semibold text-gray-400 uppercase">Daftar Pengajuan Anda</h4>
-              <div id="umkmList" class="space-y-2">
-                <p class="text-sm text-gray-400">Memuat data UMKM...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 5: EVENT & AGENDA -->
-        <div id="tab-event" class="hidden space-y-6">
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
-            <div class="border-b pb-4">
-              <h3 class="text-lg font-bold text-gray-800">Agenda & Event Komunitas</h3>
-              <p class="text-xs text-gray-500">Ikuti seminar, pelatihan, dan kegiatan resmi The Circle Hub</p>
-            </div>
-            <div id="eventList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <p class="text-sm text-gray-400">Memuat event...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 6: PROFIL ANGGOTA LENGKAP -->
-        <div id="tab-profil" class="hidden bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
-          <div class="border-b border-gray-100 pb-4 flex items-center space-x-4">
-            <div class="relative">
-              <div id="profilePhotoPreview" class="w-20 h-20 rounded-full bg-blue-100 border-2 border-blue-600 text-blue-600 flex items-center justify-center text-3xl font-bold overflow-hidden shadow">
-                <i class="fa-solid fa-user"></i>
-              </div>
-            </div>
-            <div>
-              <h3 class="text-lg font-bold text-gray-800">Profil Keanggotaan & Identitas</h3>
-              <p class="text-xs text-gray-500">Upload foto profil & lengkapi verifikasi identitas Anda</p>
-            </div>
-          </div>
-
-          <form id="formProfil" class="space-y-4 max-w-xl">
-            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-700">Foto Profil Anggota</label>
-                <p class="text-[11px] text-gray-500">Pilih foto dari HP/Laptop (Format JPG/PNG)</p>
-              </div>
-              <label class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center space-x-2">
-                <i class="fa-solid fa-camera"></i>
-                <span>Pilih Foto</span>
-                <input type="file" id="inputFotoFile" accept="image/*" class="hidden" onchange="uploadFotoProfil(this)">
-              </label>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Email Terdaftar</label>
-                <input type="text" id="profEmail" readonly class="w-full bg-gray-50 border rounded-xl px-4 py-2.5 text-sm text-gray-500">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lengkap</label>
-                <input type="text" id="profNama" required placeholder="Nama sesuai KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor WhatsApp / HP</label>
-                <input type="text" id="profHp" placeholder="081234567890" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Pekerjaan / Bidang Bisnis</label>
-                <input type="text" id="profBisnis" placeholder="Contoh: Driver / UMKM Kuliner" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-            </div>
-
-            <hr class="my-4 border-gray-100">
-            <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Verifikasi Identitas & Legalitas Dokumen</h4>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">No KTP</label>
-                <input type="text" id="profKtp" placeholder="16 Digit NIK KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">No Kartu Keluarga</label>
-                <input type="text" id="profKk" placeholder="16 Digit Nomor KK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">No NPWP</label>
-                <input type="text" id="profNpwp" placeholder="Nomor NPWP Anggota" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">No SKCK</label>
-                <input type="text" id="profSkck" placeholder="Nomor Surat SKCK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Ketenagakerjaan</label>
-                <input type="text" id="profBpjsTk" placeholder="Nomor Kartu BPJS TK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Kesehatan</label>
-                <input type="text" id="profBpjsKes" placeholder="Nomor Kartu BPJS Kesehatan" class="w-full border rounded-xl px-4 py-2.5 text-sm">
-              </div>
-            </div>
-
-            <button type="submit" class="bg-blue-600 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition">Simpan Semua Data Profil</button>
-          </form>
-        </div>
-      </main>
-    </div>
-  </div>
-
-  <!-- NAVIGATION BAR BOTTOM (Mobile) -->
-  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-2 px-6 flex justify-between md:hidden z-40">
-    <button onclick="switchTab('home')" id="mob-home" class="flex flex-col items-center text-blue-600">
-      <i class="fa-solid fa-house text-lg"></i>
-      <span class="text-[10px] font-medium mt-0.5">Beranda</span>
-    </button>
-    <button onclick="switchTab('saldo')" id="mob-saldo" class="flex flex-col items-center text-gray-400">
-      <i class="fa-solid fa-wallet text-lg"></i>
-      <span class="text-[10px] font-medium mt-0.5">Kas</span>
-    </button>
-    <button onclick="switchTab('pendapatan')" id="mob-pendapatan" class="flex flex-col items-center text-gray-400">
-      <i class="fa-solid fa-chart-pie text-lg"></i>
-      <span class="text-[10px] font-medium mt-0.5">Laporan</span>
-    </button>
-    <button onclick="switchTab('umkm')" id="mob-umkm" class="flex flex-col items-center text-gray-400">
-      <i class="fa-solid fa-store text-lg"></i>
-      <span class="text-[10px] font-medium mt-0.5">UMKM</span>
-    </button>
-    <button onclick="switchTab('profil')" id="mob-profil" class="flex flex-col items-center text-gray-400">
-      <i class="fa-solid fa-user text-lg"></i>
-      <span class="text-[10px] font-medium mt-0.5">Profil</span>
-    </button>
-  </div>
-
-  <!-- MODAL TRANSFER KAS ANGGOTA -->
-  <div id="modalTransfer" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-base font-bold text-gray-800">Transfer Saldo Kas</h3>
-        <button onclick="closeModalTransfer()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
+    </section>
 
-      <form id="formTransfer" class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Tujuan Transfer / Penerima</label>
-          <input type="text" id="trfTujuan" placeholder="Email / Nomor HP Anggota Penerima" required class="w-full border rounded-xl p-2.5 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Nominal Transfer (Rp)</label>
-          <input type="number" id="trfJumlah" min="1000" placeholder="Contoh: 50000" required class="w-full border rounded-xl p-2.5 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Catatan / Pesan</label>
-          <input type="text" id="trfCatatan" placeholder="Contoh: Bayar Iuran / Kas Sesama" class="w-full border rounded-xl p-2.5 text-sm">
-        </div>
-        <div class="flex space-x-2 pt-2">
-          <button type="button" onclick="closeModalTransfer()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
-          <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Kirim Transfer</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL SCANNER KAMERA BARCODE & QR -->
-  <div id="modalCameraScanner" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-5 max-w-sm w-full text-center space-y-4">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-base font-bold text-gray-800"><i class="fa-solid fa-camera mr-2 text-blue-600"></i>Scan QR / Barcode</h3>
-        <button onclick="closeCameraScanner()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-
-      <p class="text-xs text-gray-500">Arahkan kamera HP/Laptop Anda ke QR Code atau Barcode anggota.</p>
-      
-      <div class="bg-black rounded-2xl overflow-hidden border-2 border-blue-500 shadow-md">
-        <div id="reader" class="w-full"></div>
-      </div>
-
-      <div id="scanResult" class="text-xs text-blue-600 font-semibold bg-blue-50 p-2 rounded-xl hidden">
-        Hasil: <span id="scanResultText"></span>
-      </div>
-
-      <button onclick="closeCameraScanner()" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium text-xs">Tutup Kamera</button>
-    </div>
-  </div>
-
-  <!-- MODAL QRIS RESMI THE CIRCLE HUB INDONESIA -->
-  <div id="modalQris" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-base font-bold text-gray-800">Scan QRIS Kas TCHI</h3>
-        <button onclick="closeModalQris()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-
-      <p class="text-xs text-gray-500">Scan QRIS resmi di bawah ini menggunakan e-Wallet (Gopay, OVO, Dana, ShopeePay) atau M-Banking Anda.</p>
-      
-      <div class="p-2 bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-inner flex justify-center">
-        <img src="https://btkmwasloxwrwmffthsu.supabase.co/storage/v1/object/public/qris.jpeg/qris.jpeg.jpeg" alt="QRIS Resmi The Circle Hub Indonesia" class="w-full max-w-[280px] h-auto rounded-xl shadow-sm object-contain">
-      </div>
-
-      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer selesai, kirim bukti ke Admin untuk penyesuaian Saldo Utama.</p>
-
-      <div class="flex space-x-2 pt-1">
-        <button onclick="closeModalQris()" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl font-bold text-xs transition">Tutup</button>
-      </div>
-    </div>
-  </div>
+  </main>
 
   <script>
-    const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co"; 
+    const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_XgB1KWcve2v-30R7PbbPew_oRaxz4WG";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    let currentUser = null;
-    let userRegistrations = [];
-    let currentFotoUrl = "";
-    let currentPoin = 100;
-    let currentSaldoUtama = 0;
-    let allUserTransactions = [];
-    let allCommunityIncomes = [];
-    let html5QrcodeScanner = null;
-    let currentFilterMode = 'semua';
 
-    async function checkAuth() {
-      const { data: { session } } = await _supabase.auth.getSession();
-      if (!session) { window.location.href = "login.html"; } 
-      else {
-        currentUser = session.user;
-        document.getElementById('profEmail').value = currentUser.email;
-        loadProfile();
-        loadTransactions();
-        loadUmkm();
-        loadEvents();
-      }
-    }
-    checkAuth();
-
-    async function loadProfile() {
-      const { data } = await _supabase.from('profiles').select('*').eq('id', currentUser.id).single();
-      if (data) {
-        document.getElementById('userNameDisplay').innerText = data.nama_lengkap || currentUser.email.split('@')[0];
-        document.getElementById('profNama').value = data.nama_lengkap || '';
-        document.getElementById('profHp').value = data.no_hp || '';
-        document.getElementById('profBisnis').value = data.pekerjaan_bisnis || '';
-        document.getElementById('profKtp').value = data.no_ktp || '';
-        document.getElementById('profKk').value = data.no_kk || '';
-        document.getElementById('profNpwp').value = data.no_npwp || '';
-        document.getElementById('profSkck').value = data.no_skck || '';
-        document.getElementById('profBpjsTk').value = data.bpjs_tk || '';
-        document.getElementById('profBpjsKes').value = data.bpjs_kes || '';
-        currentFotoUrl = data.foto_url || '';
-        currentPoin = data.poin !== undefined ? data.poin : 100;
-
-        document.getElementById('userPoinDisplay').innerText = `${currentPoin} Poin`;
-        document.getElementById('juaraPoinText').innerText = `${currentPoin} / 300 Poin`;
-
-        if (data.role === 'admin') {
-          document.getElementById('nav-admin').classList.remove('hidden');
-          document.getElementById('userRoleDisplay').innerText = 'Pengurus Admin';
-        }
-
-        if (currentFotoUrl) {
-          const imgHtml = `<img src="${currentFotoUrl}" class="w-full h-full object-cover rounded-full">`;
-          document.getElementById('avatarHeader').innerHTML = imgHtml;
-          document.getElementById('profilePhotoPreview').innerHTML = imgHtml;
-        }
-      }
-    }
-
-    async function uploadFotoProfil(input) {
-      if (!input.files || input.files.length === 0) return;
-
-      const file = input.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      document.getElementById('profilePhotoPreview').innerHTML = `<i class="fa-solid fa-spinner fa-spin text-2xl"></i>`;
-
-      const { data, error } = await _supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
-
-      if (error) {
-        alert("Gagal upload foto: " + error.message);
-        loadProfile();
+    // 1. Cek User Login & Muat Profil
+    async function loadUserProfile() {
+      const { data: { user } } = await _supabase.auth.getUser();
+      if (!user) {
+        window.location.href = "login.html";
         return;
       }
 
-      const { data: urlData } = _supabase.storage.from('avatars').getPublicUrl(filePath);
-      currentFotoUrl = urlData.publicUrl;
-
-      await _supabase.from('profiles').upsert({
-        id: currentUser.id,
-        foto_url: currentFotoUrl,
-        updated_at: new Date()
-      });
-
-      alert("Foto profil berhasil diperbarui!");
-      loadProfile();
-    }
-
-    document.getElementById('formProfil').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const { error } = await _supabase.from('profiles').upsert({
-        id: currentUser.id,
-        nama_lengkap: document.getElementById('profNama').value,
-        no_hp: document.getElementById('profHp').value,
-        pekerjaan_bisnis: document.getElementById('profBisnis').value,
-        no_ktp: document.getElementById('profKtp').value,
-        no_kk: document.getElementById('profKk').value,
-        no_npwp: document.getElementById('profNpwp').value,
-        no_skck: document.getElementById('profSkck').value,
-        bpjs_tk: document.getElementById('profBpjsTk').value,
-        bpjs_kes: document.getElementById('profBpjsKes').value,
-        foto_url: currentFotoUrl,
-        updated_at: new Date()
-      });
-      if (!error) { alert("Data profil & identitas berhasil disimpan!"); loadProfile(); }
-      else { alert("Gagal menyimpan profil: " + error.message); }
-    });
-
-    async function loadTransactions() {
-      const { data, error } = await _supabase.from('transaksi').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-      if (error) return;
-
-      allUserTransactions = data || [];
-      currentSaldoUtama = 0;
-      let html = '';
-
-      if (allUserTransactions.length === 0) {
-        html = '<tr><td colspan="3" class="py-4 text-center text-gray-400">Belum ada transaksi</td></tr>';
-      } else {
-        allUserTransactions.forEach(tx => {
-          const isMasuk = tx.tipe === 'masuk';
-          if (isMasuk) currentSaldoUtama += Number(tx.jumlah);
-          else currentSaldoUtama -= Number(tx.jumlah);
-
-          html += `
-            <tr>
-              <td class="py-3 font-semibold text-gray-800">${tx.keterangan}</td>
-              <td class="py-3"><span class="${isMasuk ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} text-xs px-2.5 py-0.5 rounded-full font-medium">${isMasuk ? 'Masuk' : 'Keluar'}</span></td>
-              <td class="py-3 text-right font-bold ${isMasuk ? 'text-emerald-600' : 'text-rose-600'}">${isMasuk ? '+' : '-'} Rp ${Number(tx.jumlah).toLocaleString('id-ID')}</td>
-            </tr>
-          `;
-        });
-      }
-
-      document.getElementById('totalSaldoDisplay').innerText = `Rp ${currentSaldoUtama.toLocaleString('id-ID')}`;
-      document.getElementById('transactionList').innerHTML = html;
-
-      renderIuranTracker();
-    }
-
-    function renderIuranTracker() {
-      const today = new Date();
-      let todayPaid = false;
-      let html7Days = '';
-
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(today.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
-        const dayLabel = d.toLocaleDateString('id-ID', { weekday: 'short' });
-
-        const paid = allUserTransactions.some(t => {
-          const tDate = new Date(t.created_at).toISOString().split('T')[0];
-          return tDate === dateStr && t.keterangan.includes('Iuran Sukarela Harian');
-        });
-
-        if (i === 0 && paid) todayPaid = true;
-
-        html7Days += `
-          <div class="bg-gray-50 border p-2 rounded-xl flex flex-col items-center">
-            <span class="text-[10px] text-gray-400 uppercase font-semibold">${dayLabel}</span>
-            <div class="mt-1">
-              ${paid ? 
-                '<i class="fa-solid fa-circle-check text-emerald-500 text-base"></i>' : 
-                '<i class="fa-regular fa-circle text-gray-300 text-base"></i>'}
-            </div>
-          </div>
-        `;
-      }
-
-      document.getElementById('tracker7Hari').innerHTML = html7Days;
-
-      if (todayPaid) {
-        document.getElementById('statusBadgeHariIni').innerHTML = `<span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-check mr-1"></i>Lunas Hari Ini</span>`;
-        document.getElementById('btnBayarIuranCepat').disabled = true;
-        document.getElementById('btnBayarIuranCepat').className = "w-full sm:w-auto bg-gray-200 text-gray-500 text-xs font-bold px-5 py-3 rounded-xl cursor-not-allowed flex items-center justify-center space-x-2";
-        document.getElementById('btnBayarIuranCepat').innerHTML = `<i class="fa-solid fa-check"></i><span>Iuran Hari Ini Lunas</span>`;
-      } else {
-        document.getElementById('statusBadgeHariIni').innerHTML = `<span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>`;
-      }
-    }
-
-    // SYSTEM PEMBAYARAN IURAN: POTONG SALDO UTAMA
-    async function bayarIuranHarianCepat() {
-      if (currentSaldoUtama < 10000) {
-        alert("Saldo Utama tidak mencukupi (Minimal Rp 10.000). Silakan lakukan Top Up terlebih dahulu!");
-        openModalQris();
-        return;
-      }
-
-      const { error: txErr } = await _supabase.from('transaksi').insert([{
-        user_id: currentUser.id,
-        tipe: 'keluar',
-        keterangan: 'Iuran Sukarela Harian (Rp 10.000)',
-        jumlah: 10000
-      }]);
-
-      if (txErr) {
-        alert("Gagal memproses pembayaran: " + txErr.message);
-        return;
-      }
-
-      const newPoin = currentPoin + 10;
-      await _supabase.from('profiles').upsert({
-        id: currentUser.id,
-        poin: newPoin,
-        updated_at: new Date()
-      });
-
-      alert("Pembayaran Iuran Harian Rp 10.000 Berhasil! Saldo Utama dipotong dan Anda mendapatkan +10 Poin.");
-      loadProfile();
-      loadTransactions();
-    }
-
-    // LAPORAN KEUANGAN READ-ONLY UNTUK ANGGOTA (DENGAN FILTER & DAFTAR ANGGOTA)
-    async function loadIncomeReport() {
-      const { data, error } = await _supabase
-        .from('transaksi')
+      const { data: profile } = await _supabase
+        .from('profiles')
         .select('*')
-        .eq('tipe', 'masuk')
-        .order('created_at', { ascending: false });
+        .eq('id', user.id)
+        .single();
 
-      if (error) return;
-
-      allCommunityIncomes = data || [];
-      renderFilteredIncomeReport();
-      loadRegisteredUsersForReport();
-    }
-
-    async function loadRegisteredUsersForReport() {
-      const { data: profiles, error } = await _supabase.from('profiles').select('*').order('created_at', { ascending: false });
-      if (error) return;
-
-      document.getElementById('reportTotalUsersCount').innerText = `${profiles ? profiles.length : 0} Anggota`;
-
-      let tableHtml = '';
-      if (!profiles || profiles.length === 0) {
-        tableHtml = '<tr><td colspan="4" class="py-4 text-center text-gray-400">Belum ada anggota terdaftar</td></tr>';
-      } else {
-        profiles.forEach(u => {
-          const hasDocs = u.no_ktp && u.no_kk;
-          const statusBadge = hasDocs ? 
-            '<span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold">Terverifikasi</span>' : 
-            '<span class="bg-blue-100 text-blue-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Dilengkapi</span>';
-
-          tableHtml += `
-            <tr>
-              <td class="py-3 font-semibold text-gray-800">
-                <div class="flex items-center space-x-2">
-                  <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold text-xs overflow-hidden shadow-sm">
-                    ${u.foto_url ? `<img src="${u.foto_url}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user"></i>`}
-                  </div>
-                  <div>
-                    <p class="text-sm font-bold text-gray-800">${u.nama_lengkap || 'Anggota TCHI'}</p>
-                    <p class="text-[10px] text-gray-400">${u.id.substring(0, 12)}...</p>
-                  </div>
-                </div>
-              </td>
-              <td class="py-3 text-xs text-gray-500">
-                <p class="font-medium text-gray-700">${u.no_hp || '-'}</p>
-                <p class="text-[10px] text-gray-400">${u.pekerjaan_bisnis || 'Driver / UMKM'}</p>
-              </td>
-              <td class="py-3">${statusBadge}</td>
-              <td class="py-3 text-right font-bold text-amber-600">${u.poin || 0} Poin</td>
-            </tr>
-          `;
-        });
-      }
-
-      document.getElementById('reportUserTableList').innerHTML = tableHtml;
-    }
-
-    function filterReport(mode) {
-      currentFilterMode = mode;
-
-      ['Harian', 'Mingguan', 'Bulanan', 'Semua'].forEach(m => {
-        const btn = document.getElementById(`btnFilter${m}`);
-        if (m.toLowerCase() === mode) {
-          btn.className = "px-3 py-1.5 rounded-lg bg-blue-600 text-white font-bold transition";
-        } else {
-          btn.className = "px-3 py-1.5 rounded-lg text-slate-300 font-medium hover:text-white transition";
+      if (profile) {
+        document.getElementById('userName').innerText = profile.nama_lengkap || 'Anggota';
+        if (profile.role) {
+          document.getElementById('userRole').innerText = profile.role.toUpperCase();
         }
-      });
-
-      renderFilteredIncomeReport();
-    }
-
-    function renderFilteredIncomeReport() {
-      const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
-
-      let filteredData = allCommunityIncomes.filter(tx => {
-        const txDate = new Date(tx.created_at);
-        const txDateStr = txDate.toISOString().split('T')[0];
-
-        if (currentFilterMode === 'harian') {
-          return txDateStr === todayStr;
-        } else if (currentFilterMode === 'mingguan') {
-          const diffDays = (now - txDate) / (1000 * 60 * 60 * 24);
-          return diffDays <= 7;
-        } else if (currentFilterMode === 'bulanan') {
-          return txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
-        }
-        return true;
-      });
-
-      let totalPemasukan = 0;
-      let htmlTable = '';
-
-      if (filteredData.length === 0) {
-        htmlTable = '<tr><td colspan="5" class="py-4 text-center text-gray-400">Tidak ada data transaksi untuk periode ini</td></tr>';
-      } else {
-        filteredData.forEach(tx => {
-          const amount = Number(tx.jumlah);
-          totalPemasukan += amount;
-
-          const santunan = amount * 0.15;
-          const fleksibel = amount * 0.55;
-
-          const txDate = new Date(tx.created_at).toLocaleDateString('id-ID', {
-            day: 'numeric',
-            month: 'short',
-            year: 'numeric'
-          });
-
-          htmlTable += `
-            <tr>
-              <td class="py-3 text-xs text-gray-500">${txDate}</td>
-              <td class="py-3 font-semibold text-gray-800">${tx.keterangan}</td>
-              <td class="py-3 text-right font-bold text-emerald-600">+ Rp ${amount.toLocaleString('id-ID')}</td>
-              <td class="py-3 text-right font-medium text-rose-600">Rp ${santunan.toLocaleString('id-ID')}</td>
-              <td class="py-3 text-right font-medium text-blue-600">Rp ${fleksibel.toLocaleString('id-ID')}</td>
-            </tr>
-          `;
-        });
-      }
-
-      const valSantunan = totalPemasukan * 0.15;
-      const valFleksibel = totalPemasukan * 0.55;
-      const valMengendap = totalPemasukan * 0.05;
-      const valBagiHasil = totalPemasukan * 0.20;
-      const valOperasional = totalPemasukan * 0.05;
-
-      document.getElementById('incTotalPemasukan').innerText = `Rp ${totalPemasukan.toLocaleString('id-ID')}`;
-      document.getElementById('alokasiSantunan').innerText = `Rp ${valSantunan.toLocaleString('id-ID')}`;
-      document.getElementById('alokasiFleksibel').innerText = `Rp ${valFleksibel.toLocaleString('id-ID')}`;
-      document.getElementById('alokasiMengendap').innerText = `Rp ${valMengendap.toLocaleString('id-ID')}`;
-      document.getElementById('alokasiBagiHasil').innerText = `Rp ${valBagiHasil.toLocaleString('id-ID')}`;
-      document.getElementById('alokasiOperasional').innerText = `Rp ${valOperasional.toLocaleString('id-ID')}`;
-
-      document.getElementById('incomeReportList').innerHTML = htmlTable;
-    }
-
-    // SCANNER KAMERA
-    function openCameraScanner() {
-      document.getElementById('modalCameraScanner').classList.remove('hidden');
-      document.getElementById('modalCameraScanner').classList.add('flex');
-
-      if (!html5QrcodeScanner) {
-        html5QrcodeScanner = new Html5Qrcode("reader");
-      }
-
-      html5QrcodeScanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
-        onScanSuccess,
-        onScanFailure
-      ).catch(err => {
-        console.error("Gagal membuka kamera: ", err);
-        alert("Akses kamera ditolak atau tidak ditemukan.");
-      });
-    }
-
-    function onScanSuccess(decodedText, decodedResult) {
-      document.getElementById('scanResult').classList.remove('hidden');
-      document.getElementById('scanResultText').innerText = decodedText;
-      alert("Hasil Scan Barcode: " + decodedText);
-      closeCameraScanner();
-    }
-
-    function onScanFailure(error) {}
-
-    function closeCameraScanner() {
-      if (html5QrcodeScanner) {
-        html5QrcodeScanner.stop().then(() => {
-          document.getElementById('modalCameraScanner').classList.add('hidden');
-          document.getElementById('modalCameraScanner').classList.remove('flex');
-        }).catch(err => {
-          document.getElementById('modalCameraScanner').classList.add('hidden');
-          document.getElementById('modalCameraScanner').classList.remove('flex');
-        });
-      } else {
-        document.getElementById('modalCameraScanner').classList.add('hidden');
-        document.getElementById('modalCameraScanner').classList.remove('flex');
       }
     }
 
-    // MODAL TRANSFER
-    function openModalTransfer() {
-      document.getElementById('modalTransfer').classList.remove('hidden');
-      document.getElementById('modalTransfer').classList.add('flex');
-    }
+    // 2. Hitung Total Anggota Terdaftar dari Database Supabase
+    async function loadTotalAnggota() {
+      try {
+        const { count, error } = await _supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true });
 
-    function closeModalTransfer() {
-      document.getElementById('modalTransfer').classList.add('hidden');
-      document.getElementById('modalTransfer').classList.remove('flex');
-      document.getElementById('formTransfer').reset();
-    }
-
-    document.getElementById('formTransfer').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const tujuan = document.getElementById('trfTujuan').value;
-      const jumlah = Number(document.getElementById('trfJumlah').value);
-      const catatan = document.getElementById('trfCatatan').value;
-
-      if (currentSaldoUtama < jumlah) {
-        alert("Saldo Utama Anda tidak mencukupi untuk melakukan transfer ini!");
-        return;
-      }
-
-      const { error } = await _supabase.from('transaksi').insert([{
-        user_id: currentUser.id,
-        tipe: 'keluar',
-        keterangan: `Transfer ke ${tujuan} (${catatan || 'Kirim Saldo'})`,
-        jumlah: jumlah
-      }]);
-
-      if (!error) {
-        alert("Transfer sebesar Rp " + jumlah.toLocaleString('id-ID') + " berhasil diproses!");
-        closeModalTransfer();
-        loadTransactions();
-      } else {
-        alert("Gagal melakukan transfer: " + error.message);
-      }
-    });
-
-    async function loadUmkm() {
-      const { data, error } = await _supabase.from('umkm_pengajuan').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
-      if (error) return;
-
-      let html = '';
-      if (data.length === 0) {
-        html = '<p class="text-xs text-gray-400 py-3">Belum ada pengajuan UMKM.</p>';
-      } else {
-        data.forEach(item => {
-          html += `
-            <div class="p-3 border rounded-xl flex justify-between items-center">
-              <div>
-                <h5 class="font-bold text-sm text-gray-800">${item.nama_usaha}</h5>
-                <p class="text-xs text-gray-500">${item.kategori_usaha} • ${item.tujuan_pengajuan}</p>
-              </div>
-              <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-semibold">${item.status}</span>
-            </div>
-          `;
-        });
-      }
-      document.getElementById('umkmList').innerHTML = html;
-    }
-
-    async function loadEvents() {
-      const { data: regData } = await _supabase.from('event_registrations').select('event_id').eq('user_id', currentUser.id);
-      userRegistrations = regData ? regData.map(r => r.event_id) : [];
-
-      const { data, error } = await _supabase.from('events').select('*').order('tanggal', { ascending: true });
-      if (error) return;
-
-      let html = '';
-      if (data.length === 0) {
-        html = '<p class="text-xs text-gray-400 py-3">Belum ada agenda event terbaru.</p>';
-      } else {
-        data.forEach(item => {
-          const isRegistered = userRegistrations.includes(item.id);
-          const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-
-          html += `
-            <div class="border rounded-2xl p-4 flex flex-col justify-between space-y-3 bg-gray-50">
-              <div>
-                <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-md">${tgl}</span>
-                <h4 class="font-bold text-sm text-gray-800 mt-1">${item.judul}</h4>
-                <p class="text-xs text-gray-500 mt-1">${item.deskripsi || ''}</p>
-                <p class="text-xs text-gray-400 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>${item.lokasi}</p>
-              </div>
-              <div>
-                ${isRegistered ? 
-                  `<button disabled class="w-full bg-emerald-100 text-emerald-700 text-xs font-semibold py-2 rounded-xl"><i class="fa-solid fa-check mr-1"></i>Sudah Terdaftar</button>` :
-                  `<button onclick="daftarEvent('${item.id}')" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold py-2 rounded-xl transition">Daftar Sekarang</button>`
-                }
-              </div>
-            </div>
-          `;
-        });
-      }
-      document.getElementById('eventList').innerHTML = html;
-    }
-
-    async function daftarEvent(eventId) {
-      const { error } = await _supabase.from('event_registrations').insert([{ event_id: eventId, user_id: currentUser.id }]);
-      if (!error) {
-        alert("Berhasil terdaftar dalam event!");
-        loadEvents();
-      } else {
-        alert("Gagal mendaftar: " + error.message);
+        if (error) throw error;
+        document.getElementById('totalAnggotaCount').innerText = count || 0;
+      } catch (err) {
+        console.error('Gagal memuat total anggota:', err.message);
       }
     }
 
-    function openModalSolidaritas() {
-      openModalTransfer();
-      document.getElementById('trfTujuan').value = 'Kas Solidaritas Driver TCHI';
-      document.getElementById('trfCatatan').value = 'Donasi Solidaritas';
-    }
-
-    function openModalUmkm() { document.getElementById('modalUmkm').classList.remove('hidden'); document.getElementById('modalUmkm').classList.add('flex'); }
-    function closeModalUmkm() { document.getElementById('modalUmkm').classList.add('hidden'); document.getElementById('modalUmkm').classList.remove('flex'); }
-
-    function openModalQris() { document.getElementById('modalQris').classList.remove('hidden'); document.getElementById('modalQris').classList.add('flex'); }
-    function closeModalQris() { document.getElementById('modalQris').classList.add('hidden'); document.getElementById('modalQris').classList.remove('flex'); }
-
-    function switchTab(tab) {
-      document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
-      document.getElementById('tab-saldo').classList.toggle('hidden', tab !== 'saldo');
-      document.getElementById('tab-pendapatan').classList.toggle('hidden', tab !== 'pendapatan');
-      document.getElementById('tab-umkm').classList.toggle('hidden', tab !== 'umkm');
-      document.getElementById('tab-event').classList.toggle('hidden', tab !== 'event');
-      document.getElementById('tab-profil').classList.toggle('hidden', tab !== 'profil');
-
-      document.getElementById('mob-home').className = tab === 'home' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
-      document.getElementById('mob-saldo').className = tab === 'saldo' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
-      document.getElementById('mob-pendapatan').className = tab === 'pendapatan' ? 'flex flex-col items-center text-indigo-600' : 'flex flex-col items-center text-gray-400';
-      document.getElementById('mob-umkm').className = tab === 'umkm' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
-      document.getElementById('mob-profil').className = tab === 'profil' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
-
-      if (tab === 'pendapatan') {
-        loadIncomeReport();
-      }
-    }
-
+    // 3. Logout
     document.getElementById('btnLogout').addEventListener('click', async () => {
       await _supabase.auth.signOut();
       window.location.href = "login.html";
     });
+
+    // Jalankan saat halaman dibuka
+    loadUserProfile();
+    loadTotalAnggota();
   </script>
 </body>
 </html>
