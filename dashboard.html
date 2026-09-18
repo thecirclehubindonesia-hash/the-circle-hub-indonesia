@@ -28,6 +28,9 @@
           <button onclick="switchTab('saldo')" id="nav-saldo" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
             <i class="fa-solid fa-wallet w-5"></i><span>Kas & Transaksi</span>
           </button>
+          <button onclick="switchTab('pendapatan')" id="nav-pendapatan" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
+            <i class="fa-solid fa-chart-pie w-5"></i><span>Laporan Keuangan</span>
+          </button>
           <button onclick="switchTab('umkm')" id="nav-umkm" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
             <i class="fa-solid fa-store w-5"></i><span>Grup UMKM</span>
           </button>
@@ -108,90 +111,7 @@
             </div>
           </div>
 
-          <!-- KARTU MODUL IURAN HARIAN -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-              <div>
-                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">Iuran Harian Komunitas</span>
-                <h3 class="text-sm font-bold text-gray-800 mt-1">Status Pembayaran Hari Ini</h3>
-              </div>
-              <div id="statusBadgeHariIni">
-                <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
-              </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
-              <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold shadow">
-                  <i class="fa-solid fa-hand-holding-dollar"></i>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500">Nominal Iuran Pokok</p>
-                  <p class="text-lg font-extrabold text-gray-800">Rp 10.000 <span class="text-xs font-normal text-gray-500">/ hari</span></p>
-                  <p class="text-[11px] text-emerald-600 font-medium">Potong Saldo Utama & +10 Poin</p>
-                </div>
-              </div>
-              <button id="btnBayarIuranCepat" onclick="bayarIuranHarianCepat()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md flex items-center justify-center space-x-2">
-                <i class="fa-solid fa-bolt"></i>
-                <span>Bayar Iuran (1-Klik)</span>
-              </button>
-            </div>
-
-            <!-- PELACAK 7 HARI TERAKHIR -->
-            <div>
-              <p class="text-xs font-semibold text-gray-500 mb-2">Rekam Iuran 7 Hari Terakhir</p>
-              <div id="tracker7Hari" class="grid grid-cols-7 gap-1.5 text-center">
-                <!-- Generasi Otomatis via JS -->
-              </div>
-            </div>
-          </div>
-
-          <!-- GRID MENU SUPERAPP -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-3">
-            <h2 class="text-sm font-bold text-gray-800 tracking-wide">Layanan & Ekosistem</h2>
-            <div class="grid grid-cols-4 gap-4 text-center">
-              <button onclick="switchTab('saldo')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-wallet"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Kas & Transaksi</span>
-              </button>
-
-              <button onclick="switchTab('umkm')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-store"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Grup UMKM</span>
-              </button>
-
-              <button onclick="openModalSolidaritas()" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Kas Solidaritas</span>
-              </button>
-
-              <button onclick="switchTab('event')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-calendar-day"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Event & Agenda</span>
-              </button>
-
-              <button onclick="switchTab('profil')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-id-card"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Profil Anggota</span>
-              </button>
-
-              <button onclick="alert('Form Donasi & Bantuan Ekosistem!')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-heart-circle-check"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Donasi</span>
-              </button>
-
-              <button onclick="openModalQris()" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-qrcode"></i></div>
-                <span class="text-xs text-gray-700 font-medium">QRIS TopUp</span>
-              </button>
-
-              <button onclick="alert('Pusat Bantuan WhatsApp!')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl group-hover:bg-sky-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-headset"></i></div>
-                <span class="text-xs text-gray-700 font-medium">Bantuan</span>
-              </button>
-            </div>
-          </div>
-<!-- CARD PROGRAM JUARA -->
+          <!-- CARD PROGRAM JUARA -->
           <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-600 rounded-2xl p-5 text-white shadow-md space-y-4">
             <div class="flex justify-between items-start">
               <div>
@@ -243,7 +163,91 @@
               </div>
             </div>
           </div>
-          
+
+          <!-- KARTU MODUL IURAN HARIAN -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+              <div>
+                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">Iuran Harian Komunitas</span>
+                <h3 class="text-sm font-bold text-gray-800 mt-1">Status Pembayaran Hari Ini</h3>
+              </div>
+              <div id="statusBadgeHariIni">
+                <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold shadow">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">Nominal Iuran Pokok</p>
+                  <p class="text-lg font-extrabold text-gray-800">Rp 10.000 <span class="text-xs font-normal text-gray-500">/ hari</span></p>
+                  <p class="text-[11px] text-emerald-600 font-medium">Potong Saldo Utama & +10 Poin</p>
+                </div>
+              </div>
+              <button id="btnBayarIuranCepat" onclick="bayarIuranHarianCepat()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Bayar Iuran (1-Klik)</span>
+              </button>
+            </div>
+
+            <!-- PELACAK 7 HARI TERAKHIR -->
+            <div>
+              <p class="text-xs font-semibold text-gray-500 mb-2">Rekam Iuran 7 Hari Terakhir</p>
+              <div id="tracker7Hari" class="grid grid-cols-7 gap-1.5 text-center">
+                <!-- Generasi Otomatis via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- GRID MENU SUPERAPP -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-3">
+            <h2 class="text-sm font-bold text-gray-800 tracking-wide">Layanan & Ekosistem</h2>
+            <div class="grid grid-cols-4 gap-4 text-center">
+              <button onclick="switchTab('saldo')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-wallet"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Kas & Transaksi</span>
+              </button>
+
+              <button onclick="switchTab('pendapatan')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-chart-pie"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Laporan Kas</span>
+              </button>
+
+              <button onclick="switchTab('umkm')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-store"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Grup UMKM</span>
+              </button>
+
+              <button onclick="openModalSolidaritas()" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Kas Solidaritas</span>
+              </button>
+
+              <button onclick="switchTab('event')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-calendar-day"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Event & Agenda</span>
+              </button>
+
+              <button onclick="switchTab('profil')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl group-hover:bg-sky-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-id-card"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Profil Anggota</span>
+              </button>
+
+              <button onclick="openModalQris()" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-qrcode"></i></div>
+                <span class="text-xs text-gray-700 font-medium">QRIS TopUp</span>
+              </button>
+
+              <button onclick="alert('Pusat Bantuan WhatsApp!')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-headset"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Bantuan</span>
+              </button>
+            </div>
+          </div>
+
           <!-- BANNER PENGUMUMAN -->
           <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-4 text-white flex justify-between items-center shadow-sm">
             <div>
@@ -277,7 +281,112 @@
           </div>
         </div>
 
-        <!-- TAB 3: GRUP UMKM -->
+        <!-- TAB 3: LAPORAN KEUANGAN & ALOKASI DANA OTOMATIS -->
+        <div id="tab-pendapatan" class="hidden space-y-6">
+          
+          <!-- RINGKASAN TOTAL PENDAPATAN -->
+          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-md flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <span class="bg-blue-600/30 text-blue-300 text-xs font-bold px-3 py-1 rounded-full border border-blue-500/30">Total Akumulasi Pemasukan</span>
+              <h2 class="text-3xl font-black text-amber-400 mt-2" id="incTotalPemasukan">Rp 0</h2>
+              <p class="text-xs text-slate-400 mt-1">Sumber dari seluruh iuran, top-up, dan pendapatan masuk ekosistem</p>
+            </div>
+            <button onclick="openModalIncomeManual()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-lg flex items-center gap-2">
+              <i class="fa-solid fa-plus-circle text-sm"></i>
+              <span>Catat Pemasukan Baru</span>
+            </button>
+          </div>
+
+          <!-- KARTU RINCIAN PEMBAGIAN ALOKASI DANA OTOMATIS (5 KANTONG) -->
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="text-sm font-bold text-gray-800 tracking-wide">Pembagian Alokasi Kas Otomatis</h3>
+              <span class="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">100% Terdistribusi Presisi</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              <!-- 1. DANA FLEKSIBEL (55%) -->
+              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-blue-600">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-gray-500">Akselerasi Fleksibel</span>
+                  <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-md">55%</span>
+                </div>
+                <h4 class="text-xl font-black text-gray-800" id="alokasiFleksibel">Rp 0</h4>
+                <p class="text-[11px] text-gray-400">Modal kerja, pengembangan ekosistem & kegiatan UMKM</p>
+              </div>
+
+              <!-- 2. BAGI HASIL & KUMPUL RUTIN (20%) -->
+              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-purple-600">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-gray-500">Bagi Hasil & Kumpul Rutin</span>
+                  <span class="bg-purple-100 text-purple-700 text-[10px] font-black px-2 py-0.5 rounded-md">20%</span>
+                </div>
+                <h4 class="text-xl font-black text-gray-800" id="alokasiBagiHasil">Rp 0</h4>
+                <p class="text-[11px] text-gray-400">Dividen usaha bulanan & anggaran kumpul rutin anggota</p>
+              </div>
+
+              <!-- 3. SANTUNAN & MUSIBAH (15%) -->
+              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-rose-600">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-gray-500">Santunan & Musibah</span>
+                  <span class="bg-rose-100 text-rose-700 text-[10px] font-black px-2 py-0.5 rounded-md">15%</span>
+                </div>
+                <h4 class="text-xl font-black text-gray-800" id="alokasiSantunan">Rp 0</h4>
+                <p class="text-[11px] text-gray-400">Perlindungan sosial & bantuan darurat musibah anggota</p>
+              </div>
+
+              <!-- 4. CADANGAN MENGENDAP (5%) -->
+              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-amber-500">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-gray-500">Cadangan Mengendap</span>
+                  <span class="bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-0.5 rounded-md">5%</span>
+                </div>
+                <h4 class="text-xl font-black text-gray-800" id="alokasiMengendap">Rp 0</h4>
+                <p class="text-[11px] text-gray-400">Kas abadi & dana simpanan darurat komunitas</p>
+              </div>
+
+              <!-- 5. OPERASIONAL & ADMIN (5%) -->
+              <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2 border-l-4 border-l-slate-600">
+                <div class="flex justify-between items-center">
+                  <span class="text-xs font-bold text-gray-500">Layanan & Operasional</span>
+                  <span class="bg-slate-100 text-slate-700 text-[10px] font-black px-2 py-0.5 rounded-md">5%</span>
+                </div>
+                <h4 class="text-xl font-black text-gray-800" id="alokasiOperasional">Rp 0</h4>
+                <p class="text-[11px] text-gray-400">Biaya pemeliharaan sistem, server & administrasi</p>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TABEL RIWAYAT PEMASUKAN DAN POTONGANNYA -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+            <div class="border-b pb-4">
+              <h3 class="text-lg font-bold text-gray-800">Rincian Transaksi Pemasukan</h3>
+              <p class="text-xs text-gray-500">Setiap dana masuk langsung terhitung ke dalam 5 kantong alokasi</p>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <thead>
+                  <tr class="text-gray-400 border-b pb-3 text-xs uppercase">
+                    <th class="pb-3">WAKTU</th>
+                    <th class="pb-3">KETERANGAN PEMASUKAN</th>
+                    <th class="pb-3 text-right">TOTAL (100%)</th>
+                    <th class="pb-3 text-right text-rose-600">SANTUNAN (15%)</th>
+                    <th class="pb-3 text-right text-blue-600">FLEKSIBEL (55%)</th>
+                  </tr>
+                </thead>
+                <tbody id="incomeReportList" class="divide-y divide-gray-100">
+                  <tr><td colspan="5" class="py-4 text-center text-gray-400">Memuat laporan keuangan...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TAB 4: GRUP UMKM -->
         <div id="tab-umkm" class="hidden space-y-6">
           <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
             <div class="flex justify-between items-center border-b pb-4">
@@ -296,7 +405,7 @@
           </div>
         </div>
 
-        <!-- TAB 4: EVENT & AGENDA -->
+        <!-- TAB 5: EVENT & AGENDA -->
         <div id="tab-event" class="hidden space-y-6">
           <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
             <div class="border-b pb-4">
@@ -309,7 +418,7 @@
           </div>
         </div>
 
-        <!-- TAB 5: PROFIL ANGGOTA LENGKAP -->
+        <!-- TAB 6: PROFIL ANGGOTA LENGKAP -->
         <div id="tab-profil" class="hidden bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
           <div class="border-b border-gray-100 pb-4 flex items-center space-x-4">
             <div class="relative">
@@ -411,13 +520,13 @@
       <i class="fa-solid fa-wallet text-lg"></i>
       <span class="text-[10px] font-medium mt-0.5">Kas</span>
     </button>
+    <button onclick="switchTab('pendapatan')" id="mob-pendapatan" class="flex flex-col items-center text-gray-400">
+      <i class="fa-solid fa-chart-pie text-lg"></i>
+      <span class="text-[10px] font-medium mt-0.5">Laporan</span>
+    </button>
     <button onclick="switchTab('umkm')" id="mob-umkm" class="flex flex-col items-center text-gray-400">
       <i class="fa-solid fa-store text-lg"></i>
       <span class="text-[10px] font-medium mt-0.5">UMKM</span>
-    </button>
-    <button onclick="switchTab('event')" id="mob-event" class="flex flex-col items-center text-gray-400">
-      <i class="fa-solid fa-calendar-day text-lg"></i>
-      <span class="text-[10px] font-medium mt-0.5">Event</span>
     </button>
     <button onclick="switchTab('profil')" id="mob-profil" class="flex flex-col items-center text-gray-400">
       <i class="fa-solid fa-user text-lg"></i>
@@ -449,6 +558,31 @@
         <div class="flex space-x-2 pt-2">
           <button type="button" onclick="closeModalTransfer()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
           <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Kirim Transfer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL INPUT PEMASUKAN MANUAL -->
+  <div id="modalIncomeManual" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-bold text-gray-800">Tambah Pemasukan Kas</h3>
+        <button onclick="closeModalIncomeManual()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="formIncomeManual" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Sumber Pemasukan / Keterangan</label>
+          <input type="text" id="incKet" placeholder="Contoh: Hasil Usaha UMKM / Sponsor Event" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Nominal Pemasukan (Rp)</label>
+          <input type="number" id="incJumlah" min="1000" placeholder="Contoh: 100000" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button type="button" onclick="closeModalIncomeManual()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
+          <button type="submit" class="w-1/2 bg-emerald-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-emerald-700">Simpan Pemasukan</button>
         </div>
       </form>
     </div>
@@ -541,6 +675,7 @@
         currentPoin = data.poin !== undefined ? data.poin : 100;
 
         document.getElementById('userPoinDisplay').innerText = `${currentPoin} Poin`;
+        document.getElementById('juaraPoinText').innerText = `${currentPoin} / 300 Poin`;
 
         if (data.role === 'admin') {
           document.getElementById('nav-admin').classList.remove('hidden');
@@ -712,7 +847,100 @@
       loadTransactions();
     }
 
-    // PENANGANAN SCANNER KAMERA
+    // LAPORAN KEUANGAN & ALOKASI DANA OTOMATIS
+    async function loadIncomeReport() {
+      const { data, error } = await _supabase
+        .from('transaksi')
+        .select('*')
+        .eq('tipe', 'masuk')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error("Gagal memuat laporan:", error);
+        return;
+      }
+
+      let totalPemasukan = 0;
+      let htmlTable = '';
+
+      if (!data || data.length === 0) {
+        htmlTable = '<tr><td colspan="5" class="py-4 text-center text-gray-400">Belum ada transaksi pemasukan tercatat</td></tr>';
+      } else {
+        data.forEach(tx => {
+          const amount = Number(tx.jumlah);
+          totalPemasukan += amount;
+
+          const santunan = amount * 0.15;
+          const fleksibel = amount * 0.55;
+
+          const txDate = new Date(tx.created_at).toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          });
+
+          htmlTable += `
+            <tr>
+              <td class="py-3 text-xs text-gray-500">${txDate}</td>
+              <td class="py-3 font-semibold text-gray-800">${tx.keterangan}</td>
+              <td class="py-3 text-right font-bold text-emerald-600">+ Rp ${amount.toLocaleString('id-ID')}</td>
+              <td class="py-3 text-right font-medium text-rose-600">Rp ${santunan.toLocaleString('id-ID')}</td>
+              <td class="py-3 text-right font-medium text-blue-600">Rp ${fleksibel.toLocaleString('id-ID')}</td>
+            </tr>
+          `;
+        });
+      }
+
+      const valSantunan = totalPemasukan * 0.15;
+      const valFleksibel = totalPemasukan * 0.55;
+      const valMengendap = totalPemasukan * 0.05;
+      const valBagiHasil = totalPemasukan * 0.20;
+      const valOperasional = totalPemasukan * 0.05;
+
+      document.getElementById('incTotalPemasukan').innerText = `Rp ${totalPemasukan.toLocaleString('id-ID')}`;
+      document.getElementById('alokasiSantunan').innerText = `Rp ${valSantunan.toLocaleString('id-ID')}`;
+      document.getElementById('alokasiFleksibel').innerText = `Rp ${valFleksibel.toLocaleString('id-ID')}`;
+      document.getElementById('alokasiMengendap').innerText = `Rp ${valMengendap.toLocaleString('id-ID')}`;
+      document.getElementById('alokasiBagiHasil').innerText = `Rp ${valBagiHasil.toLocaleString('id-ID')}`;
+      document.getElementById('alokasiOperasional').innerText = `Rp ${valOperasional.toLocaleString('id-ID')}`;
+
+      document.getElementById('incomeReportList').innerHTML = htmlTable;
+    }
+
+    function openModalIncomeManual() {
+      document.getElementById('modalIncomeManual').classList.remove('hidden');
+      document.getElementById('modalIncomeManual').classList.add('flex');
+    }
+
+    function closeModalIncomeManual() {
+      document.getElementById('modalIncomeManual').classList.add('hidden');
+      document.getElementById('modalIncomeManual').classList.remove('flex');
+      document.getElementById('formIncomeManual').reset();
+    }
+
+    document.getElementById('formIncomeManual').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ket = document.getElementById('incKet').value;
+      const jumlah = Number(document.getElementById('incJumlah').value);
+
+      const { error } = await _supabase.from('transaksi').insert([{
+        user_id: currentUser.id,
+        tipe: 'masuk',
+        keterangan: ket,
+        jumlah: jumlah
+      }]);
+
+      if (!error) {
+        alert("Pemasukan kas berhasil dicatat!");
+        closeModalIncomeManual();
+        loadTransactions();
+        loadIncomeReport();
+      } else {
+        alert("Gagal mencatat pemasukan: " + error.message);
+      }
+    });
+
+    // SCANNER KAMERA
     function openCameraScanner() {
       document.getElementById('modalCameraScanner').classList.remove('hidden');
       document.getElementById('modalCameraScanner').classList.add('flex');
@@ -739,9 +967,7 @@
       closeCameraScanner();
     }
 
-    function onScanFailure(error) {
-      // Pembacaan rutin per-frame
-    }
+    function onScanFailure(error) {}
 
     function closeCameraScanner() {
       if (html5QrcodeScanner) {
@@ -881,15 +1107,20 @@
     function switchTab(tab) {
       document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
       document.getElementById('tab-saldo').classList.toggle('hidden', tab !== 'saldo');
+      document.getElementById('tab-pendapatan').classList.toggle('hidden', tab !== 'pendapatan');
       document.getElementById('tab-umkm').classList.toggle('hidden', tab !== 'umkm');
       document.getElementById('tab-event').classList.toggle('hidden', tab !== 'event');
       document.getElementById('tab-profil').classList.toggle('hidden', tab !== 'profil');
 
       document.getElementById('mob-home').className = tab === 'home' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
       document.getElementById('mob-saldo').className = tab === 'saldo' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
+      document.getElementById('mob-pendapatan').className = tab === 'pendapatan' ? 'flex flex-col items-center text-indigo-600' : 'flex flex-col items-center text-gray-400';
       document.getElementById('mob-umkm').className = tab === 'umkm' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
-      document.getElementById('mob-event').className = tab === 'event' ? 'flex flex-col items-center text-purple-600' : 'flex flex-col items-center text-gray-400';
       document.getElementById('mob-profil').className = tab === 'profil' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
+
+      if (tab === 'pendapatan') {
+        loadIncomeReport();
+      }
     }
 
     document.getElementById('btnLogout').addEventListener('click', async () => {
