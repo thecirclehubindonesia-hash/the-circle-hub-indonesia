@@ -34,6 +34,9 @@
           <button onclick="switchTab('profil')" id="nav-profil" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
             <i class="fa-solid fa-user-gear w-5"></i><span>Profil Anggota</span>
           </button>
+          <a href="admin.html" id="nav-admin" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-amber-400 hover:bg-slate-800 transition font-medium hidden">
+            <i class="fa-solid fa-user-shield w-5"></i><span>Admin Panel</span>
+          </a>
         </nav>
       </div>
       <div class="p-4 border-t border-slate-800">
@@ -67,6 +70,8 @@
 
         <!-- TAB 1: BERANDA SUPERAPP -->
         <div id="tab-home" class="space-y-6">
+          
+          <!-- KARTU SALDO & POIN -->
           <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 rounded-2xl p-5 text-white shadow-lg space-y-4">
             <div class="flex justify-between items-center">
               <div>
@@ -75,7 +80,7 @@
               </div>
               <div class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 text-xs text-blue-100 flex items-center space-x-1">
                 <i class="fa-solid fa-coins text-amber-300"></i>
-                <span>100 Poin</span>
+                <span id="userPoinDisplay">100 Poin</span>
               </div>
             </div>
 
@@ -84,7 +89,7 @@
                 <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-plus"></i></div>
                 <span>Tambah</span>
               </button>
-              <button onclick="alert('Fitur Bayar QRIS Segera Hadir!')" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+              <button onclick="openModalQris()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
                 <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-qrcode"></i></div>
                 <span>Scan QR</span>
               </button>
@@ -92,10 +97,48 @@
                 <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-list-check"></i></div>
                 <span>Riwayat</span>
               </button>
-              <button onclick="alert('Fitur Top Up Segera Hadir!')" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+              <button onclick="openModalQris()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
                 <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
                 <span>Top Up</span>
               </button>
+            </div>
+          </div>
+
+          <!-- KARTU MODUL IURAN HARIAN (SKEMA KOMUNITAS) -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+              <div>
+                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">Iuran Harian Komunitas</span>
+                <h3 class="text-sm font-bold text-gray-800 mt-1">Status Pembayaran Hari Ini</h3>
+              </div>
+              <div id="statusBadgeHariIni">
+                <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold shadow">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">Nominal Iuran Pokok</p>
+                  <p class="text-lg font-extrabold text-gray-800">Rp 10.000 <span class="text-xs font-normal text-gray-500">/ hari</span></p>
+                  <p class="text-[11px] text-emerald-600 font-medium">+10 Poin Komunitas per pembayaran</p>
+                </div>
+              </div>
+              <button id="btnBayarIuranCepat" onclick="bayarIuranHarianCepat()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Bayar Iuran (1-Klik)</span>
+              </button>
+            </div>
+
+            <!-- PELACAK 7 HARI TERAKHIR -->
+            <div>
+              <p class="text-xs font-semibold text-gray-500 mb-2">Rekam Iuran 7 Hari Terakhir</p>
+              <div id="tracker7Hari" class="grid grid-cols-7 gap-1.5 text-center">
+                <!-- Generasi Otomatis via JS -->
+              </div>
             </div>
           </div>
 
@@ -225,8 +268,6 @@
           </div>
 
           <form id="formProfil" class="space-y-4 max-w-xl">
-            
-            <!-- UPLOAD FOTO PROFIL LANGSUNG -->
             <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700">Foto Profil Anggota</label>
@@ -239,7 +280,6 @@
               </label>
             </div>
 
-            <!-- NAMA & EMAIL -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Email Terdaftar</label>
@@ -251,7 +291,6 @@
               </div>
             </div>
 
-            <!-- WA & BISNIS -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor WhatsApp / HP</label>
@@ -266,7 +305,6 @@
             <hr class="my-4 border-gray-100">
             <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Verifikasi Identitas & Legalitas Dokumen</h4>
 
-            <!-- KTP & KK -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">No KTP</label>
@@ -278,7 +316,6 @@
               </div>
             </div>
 
-            <!-- NPWP & SKCK -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">No NPWP</label>
@@ -290,7 +327,6 @@
               </div>
             </div>
 
-            <!-- BPJS TK & BPJS KES -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Ketenagakerjaan</label>
@@ -398,6 +434,25 @@
     </div>
   </div>
 
+  <!-- MODAL QRIS FAST TOP-UP -->
+  <div id="modalQris" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4">
+      <h3 class="text-base font-bold text-gray-800">Scan QRIS Kas TCHI</h3>
+      <p class="text-xs text-gray-500">Scan kode QRIS ini menggunakan m-Banking atau e-Wallet Anda untuk isi saldo kas/iuran.</p>
+      
+      <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200 inline-block mx-auto">
+        <div class="w-48 h-48 bg-white border border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2">
+          <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+          <span class="text-[10px] font-bold text-gray-400">QRIS OFFICIAL TCHI</span>
+        </div>
+      </div>
+
+      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer, saldo akan diverifikasi dan diinput oleh Admin.</p>
+
+      <button onclick="closeModalQris()" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium text-sm">Tutup</button>
+    </div>
+  </div>
+
   <script>
     const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co"; 
     const SUPABASE_ANON_KEY = "sb_publishable_XgB1KWcve2v-30R7PbbPew_oRaxz4WG";
@@ -405,6 +460,8 @@
     let currentUser = null;
     let userRegistrations = [];
     let currentFotoUrl = "";
+    let currentPoin = 100;
+    let allUserTransactions = [];
 
     async function checkAuth() {
       const { data: { session } } = await _supabase.auth.getSession();
@@ -434,6 +491,14 @@
         document.getElementById('profBpjsTk').value = data.bpjs_tk || '';
         document.getElementById('profBpjsKes').value = data.bpjs_kes || '';
         currentFotoUrl = data.foto_url || '';
+        currentPoin = data.poin !== undefined ? data.poin : 100;
+
+        document.getElementById('userPoinDisplay').innerText = `${currentPoin} Poin`;
+
+        if (data.role === 'admin') {
+          document.getElementById('nav-admin').classList.remove('hidden');
+          document.getElementById('userRoleDisplay').innerText = 'Pengurus Admin';
+        }
 
         if (currentFotoUrl) {
           const imgHtml = `<img src="${currentFotoUrl}" class="w-full h-full object-cover rounded-full">`;
@@ -498,13 +563,14 @@
       const { data, error } = await _supabase.from('transaksi').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
       if (error) return;
 
+      allUserTransactions = data || [];
       let total = 0;
       let html = '';
 
-      if (data.length === 0) {
+      if (allUserTransactions.length === 0) {
         html = '<tr><td colspan="3" class="py-4 text-center text-gray-400">Belum ada transaksi</td></tr>';
       } else {
-        data.forEach(tx => {
+        allUserTransactions.forEach(tx => {
           const isMasuk = tx.tipe === 'masuk';
           if (isMasuk) total += Number(tx.jumlah);
           else total -= Number(tx.jumlah);
@@ -521,6 +587,77 @@
 
       document.getElementById('totalSaldoDisplay').innerText = `Rp ${total.toLocaleString('id-ID')}`;
       document.getElementById('transactionList').innerHTML = html;
+
+      renderIuranTracker();
+    }
+
+    function renderIuranTracker() {
+      const today = new Date();
+      let todayPaid = false;
+      let html7Days = '';
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        const dayLabel = d.toLocaleDateString('id-ID', { weekday: 'short' });
+
+        const paid = allUserTransactions.some(t => {
+          const tDate = new Date(t.created_at).toISOString().split('T')[0];
+          return tDate === dateStr && t.keterangan.includes('Iuran Sukarela Harian');
+        });
+
+        if (i === 0 && paid) todayPaid = true;
+
+        html7Days += `
+          <div class="bg-gray-50 border p-2 rounded-xl flex flex-col items-center">
+            <span class="text-[10px] text-gray-400 uppercase font-semibold">${dayLabel}</span>
+            <div class="mt-1">
+              ${paid ? 
+                '<i class="fa-solid fa-circle-check text-emerald-500 text-base"></i>' : 
+                '<i class="fa-regular fa-circle text-gray-300 text-base"></i>'}
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('tracker7Hari').innerHTML = html7Days;
+
+      if (todayPaid) {
+        document.getElementById('statusBadgeHariIni').innerHTML = `<span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-check mr-1"></i>Lunas Hari Ini</span>`;
+        document.getElementById('btnBayarIuranCepat').disabled = true;
+        document.getElementById('btnBayarIuranCepat').className = "w-full sm:w-auto bg-gray-200 text-gray-500 text-xs font-bold px-5 py-3 rounded-xl cursor-not-allowed flex items-center justify-center space-x-2";
+        document.getElementById('btnBayarIuranCepat').innerHTML = `<i class="fa-solid fa-check"></i><span>Iuran Hari Ini Lunas</span>`;
+      } else {
+        document.getElementById('statusBadgeHariIni').innerHTML = `<span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>`;
+      }
+    }
+
+    async function bayarIuranHarianCepat() {
+      // 1. Tambah Transaksi Uang Masuk
+      const { error: txErr } = await _supabase.from('transaksi').insert([{
+        user_id: currentUser.id,
+        tipe: 'masuk',
+        keterangan: 'Iuran Sukarela Harian (Rp 10.000)',
+        jumlah: 10000
+      }]);
+
+      if (txErr) {
+        alert("Gagal memproses pembayaran: " + txErr.message);
+        return;
+      }
+
+      // 2. Tambah +10 Poin Komunitas
+      const newPoin = currentPoin + 10;
+      await _supabase.from('profiles').upsert({
+        id: currentUser.id,
+        poin: newPoin,
+        updated_at: new Date()
+      });
+
+      alert("Terima kasih! Iuran harian Rp 10.000 berhasil terbayar. Anda mendapatkan +10 Poin!");
+      loadProfile();
+      loadTransactions();
     }
 
     async function loadUmkm() {
@@ -643,6 +780,9 @@
 
     function openModalUmkm() { document.getElementById('modalUmkm').classList.remove('hidden'); document.getElementById('modalUmkm').classList.add('flex'); }
     function closeModalUmkm() { document.getElementById('modalUmkm').classList.add('hidden'); document.getElementById('modalUmkm').classList.remove('flex'); }
+
+    function openModalQris() { document.getElementById('modalQris').classList.remove('hidden'); document.getElementById('modalQris').classList.add('flex'); }
+    function closeModalQris() { document.getElementById('modalQris').classList.add('hidden'); document.getElementById('modalQris').classList.remove('flex'); }
 
     function switchTab(tab) {
       document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
