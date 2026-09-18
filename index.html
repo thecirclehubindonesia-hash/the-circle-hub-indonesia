@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pendaftaran Anggota</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
@@ -63,8 +64,10 @@
       btn.disabled = true;
       btn.innerText = "Mendaftarkan...";
 
+      // Jika Email kosong, buat format internal otomatis berdasarkan No HP
       const authEmail = inputEmail !== "" ? inputEmail : `${hp}@phone.tchi.internal`;
 
+      // 1. Pendaftaran ke Supabase Auth
       const { data, error } = await _supabase.auth.signUp({ 
         email: authEmail, 
         password: password 
@@ -75,6 +78,7 @@
         btn.disabled = false;
         btn.innerText = "Daftar Sekarang";
       } else if (data.user) {
+        // 2. Simpan profil ke database Supabase
         await _supabase.from('profiles').upsert({
           id: data.user.id,
           nama_lengkap: nama,
