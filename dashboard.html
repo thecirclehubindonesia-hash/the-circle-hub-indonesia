@@ -3,139 +3,805 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beranda Utama - The Circle Hub Indonesia</title>
+  <title>Superapp - The Circle Hub Indonesia</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
+<body class="bg-gray-100 font-sans antialiased pb-20 md:pb-0">
 
-  <!-- Sidebar Navigasi -->
-  <aside class="w-full md:w-64 bg-slate-900 text-white flex-shrink-0 flex flex-col justify-between">
-    <div>
-      <div class="p-6 flex items-center gap-3 border-b border-slate-800">
-        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-blue-500/30">C</div>
-        <div>
-          <h1 class="font-bold text-lg tracking-wide">The Circle Hub</h1>
-          <p class="text-[10px] text-slate-400">Komunitas Indonesia</p>
-        </div>
-      </div>
-
-      <nav class="p-4 space-y-1.5 text-sm font-medium">
-        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/20"><span>🏠</span> Beranda Utama</a>
-        <a href="kas.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition"><span>💼</span> Kas & Transaksi</a>
-        <a href="laporan.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition"><span>📊</span> Laporan Keuangan</a>
-        <a href="umkm.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition"><span>🏪</span> Grup UMKM</a>
-        <a href="event.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition"><span>📅</span> Event & Agenda</a>
-        <a href="profil.html" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition"><span>👤</span> Profil Anggota</a>
-      </nav>
-    </div>
-
-    <div class="p-4 border-t border-slate-800">
-      <button id="btnLogout" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-rose-400 hover:bg-rose-500/10 transition font-medium text-sm"><span>🚪</span> Keluar Sesi</button>
-    </div>
-  </aside>
-
-  <!-- Konten Utama -->
-  <main class="flex-1 p-4 md:p-8 overflow-y-auto space-y-6">
-    <header class="flex items-center justify-between bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-slate-100">
-      <div class="flex items-center gap-4">
-        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg">👤</div>
-        <div>
-          <h2 id="userName" class="font-bold text-slate-800 text-base md:text-lg">Memuat...</h2>
-          <span id="userRole" class="inline-block text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full mt-0.5">Anggota Aktif</span>
-        </div>
-      </div>
-    </header>
-
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-amber-500 space-y-2">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Kas Abadi & Simpanan Emergency</h3>
-        <p class="text-2xl font-extrabold text-slate-800">Rp 500</p>
-        <p class="text-xs text-slate-500">Kas abadi & dana simpanan darurat komunitas</p>
-      </div>
-      <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-blue-500 space-y-2">
-        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Operational & System Fund</h3>
-        <p class="text-2xl font-extrabold text-slate-800">Rp 500</p>
-        <p class="text-xs text-slate-500">Biaya pemeliharaan sistem, server & administrasi</p>
-      </div>
-    </section>
-
-    <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-4">
+  <div class="flex h-screen overflow-hidden">
+    <!-- SIDEBAR NAVIGASI (Desktop) -->
+    <aside class="w-64 bg-slate-900 text-white flex-col justify-between hidden md:flex">
       <div>
-        <h3 class="text-base font-bold text-slate-800">Catatan Transaksi Pemasukan Komunitas</h3>
-        <p class="text-xs text-slate-500">Data publik transaksi kas terverifikasi oleh pengurus</p>
+        <div class="p-6 border-b border-slate-800 flex items-center space-x-3">
+          <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">C</div>
+          <span class="text-xl font-bold tracking-wide">The Circle Hub</span>
+        </div>
+        <nav class="p-4 space-y-2">
+          <button onclick="switchTab('home')" id="nav-home" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-blue-600 text-white transition font-medium">
+            <i class="fa-solid fa-house w-5"></i><span>Beranda Utama</span>
+          </button>
+          <button onclick="switchTab('saldo')" id="nav-saldo" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
+            <i class="fa-solid fa-wallet w-5"></i><span>Kas & Transaksi</span>
+          </button>
+          <button onclick="switchTab('umkm')" id="nav-umkm" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
+            <i class="fa-solid fa-store w-5"></i><span>Grup UMKM</span>
+          </button>
+          <button onclick="switchTab('event')" id="nav-event" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
+            <i class="fa-solid fa-calendar-day w-5"></i><span>Event & Agenda</span>
+          </button>
+          <button onclick="switchTab('profil')" id="nav-profil" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition font-medium">
+            <i class="fa-solid fa-user-gear w-5"></i><span>Profil Anggota</span>
+          </button>
+          <a href="admin.html" id="nav-admin" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-amber-400 hover:bg-slate-800 transition font-medium hidden">
+            <i class="fa-solid fa-user-shield w-5"></i><span>Admin Panel</span>
+          </a>
+        </nav>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-              <th class="py-3 px-2">Tanggal</th>
-              <th class="py-3 px-2">Keterangan Pemasukan</th>
-              <th class="py-3 px-2">Total (100%)</th>
-              <th class="py-3 px-2 text-rose-500">Santunan (15%)</th>
-              <th class="py-3 px-2 text-blue-600">Fleksibel (55%)</th>
-            </tr>
-          </thead>
-          <tbody class="text-xs font-medium text-slate-700 divide-y divide-slate-50">
-            <tr>
-              <td class="py-3.5 px-2 text-slate-500">17 Sep 2026</td>
-              <td class="py-3.5 px-2 font-bold text-slate-800">Iuran Sukarela Harian (Rp 10.000)</td>
-              <td class="py-3.5 px-2 text-emerald-600 font-bold">+ Rp 10.000</td>
-              <td class="py-3.5 px-2 text-rose-500 font-semibold">Rp 1.500</td>
-              <td class="py-3.5 px-2 text-blue-600 font-semibold">Rp 5.500</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="p-4 border-t border-slate-800">
+        <button id="btnLogout" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition font-medium">
+          <i class="fa-solid fa-right-from-bracket w-5"></i><span>Keluar</span>
+        </button>
       </div>
-    </section>
+    </aside>
 
-    <!-- Kartu Total Anggota Komunitas -->
-    <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-inner">👥</div>
+    <!-- AREA UTAMA -->
+    <div class="flex-1 flex flex-col overflow-y-auto">
+      <!-- HEADER UPPER BAR -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+        <div class="flex items-center space-x-3">
+          <div id="avatarHeader" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow overflow-hidden">
+            <i class="fa-solid fa-user"></i>
+          </div>
           <div>
-            <h3 class="text-base font-bold text-slate-800">Total Anggota Komunitas Terdaftar</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Seluruh jaringan anggota aktif The Circle Hub Indonesia</p>
+            <h1 class="text-sm font-bold text-gray-800" id="userNameDisplay">Memuat...</h1>
+            <p class="text-xs text-blue-600 font-semibold" id="userRoleDisplay">Anggota Aktif</p>
           </div>
         </div>
-        <div class="text-center sm:text-right bg-blue-50/50 sm:bg-transparent px-6 py-3 sm:p-0 rounded-xl w-full sm:w-auto">
-          <span id="totalAnggotaCount" class="text-3xl font-extrabold text-blue-600 block">0</span>
-          <span class="text-xs font-semibold text-slate-500">Anggota Aktif</span>
+        <div class="flex items-center space-x-3">
+          <button class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200">
+            <i class="fa-regular fa-bell"></i>
+          </button>
+        </div>
+      </header>
+
+      <main class="p-4 md:p-8 max-w-4xl w-full mx-auto space-y-6">
+
+        <!-- TAB 1: BERANDA SUPERAPP -->
+        <div id="tab-home" class="space-y-6">
+          
+          <!-- KARTU SALDO & POIN -->
+          <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 rounded-2xl p-5 text-white shadow-lg space-y-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-blue-200 text-xs font-medium">Saldo Kas Anggota</p>
+                <h3 class="text-3xl font-extrabold tracking-tight" id="totalSaldoDisplay">Rp 0</h3>
+              </div>
+              <div class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 text-xs text-blue-100 flex items-center space-x-1">
+                <i class="fa-solid fa-coins text-amber-300"></i>
+                <span id="userPoinDisplay">100 Poin</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 pt-2 border-t border-white/15 text-center text-xs">
+              <button onclick="openModal()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-plus"></i></div>
+                <span>Tambah</span>
+              </button>
+              <button onclick="openModalQris()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-qrcode"></i></div>
+                <span>Scan QR</span>
+              </button>
+              <button onclick="switchTab('saldo')" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-list-check"></i></div>
+                <span>Riwayat</span>
+              </button>
+              <button onclick="openModalQris()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-arrow-up-from-bracket"></i></div>
+                <span>Top Up</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KARTU MODUL IURAN HARIAN (SKEMA KOMUNITAS) -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+              <div>
+                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">Iuran Harian Komunitas</span>
+                <h3 class="text-sm font-bold text-gray-800 mt-1">Status Pembayaran Hari Ini</h3>
+              </div>
+              <div id="statusBadgeHariIni">
+                <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-xl font-bold shadow">
+                  <i class="fa-solid fa-hand-holding-dollar"></i>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500">Nominal Iuran Pokok</p>
+                  <p class="text-lg font-extrabold text-gray-800">Rp 10.000 <span class="text-xs font-normal text-gray-500">/ hari</span></p>
+                  <p class="text-[11px] text-emerald-600 font-medium">+10 Poin Komunitas per pembayaran</p>
+                </div>
+              </div>
+              <button id="btnBayarIuranCepat" onclick="bayarIuranHarianCepat()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Bayar Iuran (1-Klik)</span>
+              </button>
+            </div>
+
+            <!-- PELACAK 7 HARI TERAKHIR -->
+            <div>
+              <p class="text-xs font-semibold text-gray-500 mb-2">Rekam Iuran 7 Hari Terakhir</p>
+              <div id="tracker7Hari" class="grid grid-cols-7 gap-1.5 text-center">
+                <!-- Generasi Otomatis via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- GRID MENU SUPERAPP -->
+          <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-3">
+            <h2 class="text-sm font-bold text-gray-800 tracking-wide">Layanan & Ekosistem</h2>
+            <div class="grid grid-cols-4 gap-4 text-center">
+              <button onclick="switchTab('saldo')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-wallet"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Kas & Transaksi</span>
+              </button>
+
+              <button onclick="switchTab('umkm')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-store"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Grup UMKM</span>
+              </button>
+
+              <button onclick="openModalSolidaritas()" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Kas Solidaritas</span>
+              </button>
+
+              <button onclick="switchTab('event')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-calendar-day"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Event & Agenda</span>
+              </button>
+
+              <button onclick="switchTab('profil')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-id-card"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Profil Anggota</span>
+              </button>
+
+              <button onclick="alert('Form Donasi & Bantuan Ekosistem!')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-heart-circle-check"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Donasi</span>
+              </button>
+
+              <button onclick="alert('Direktori Mitra / Partner!')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-handshake"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Cari Partner</span>
+              </button>
+
+              <button onclick="alert('Pusat Bantuan WhatsApp!')" class="flex flex-col items-center group">
+                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl group-hover:bg-sky-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-headset"></i></div>
+                <span class="text-xs text-gray-700 font-medium">Bantuan</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- BANNER PENGUMUMAN -->
+          <div class="bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl p-4 text-white flex justify-between items-center shadow-sm">
+            <div>
+              <span class="bg-white/20 text-xs px-2 py-0.5 rounded font-medium">Program Eco System</span>
+              <h4 class="font-bold text-sm mt-1">From Driver to Hero</h4>
+              <p class="text-xs text-amber-100">Bergabung dalam gerakan kemandirian ekonomi anggota.</p>
+            </div>
+            <i class="fa-solid fa-bullhorn text-3xl opacity-80"></i>
+          </div>
+        </div>
+
+        <!-- TAB 2: KAS & TRANSAKSI -->
+        <div id="tab-saldo" class="hidden space-y-6">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-800">Catatan Kas & Transaksi</h3>
+            <button onclick="openModal()" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-blue-700 transition">+ Tambah Transaksi</button>
+          </div>
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <table class="w-full text-left text-sm">
+              <thead>
+                <tr class="text-gray-400 border-b pb-3 text-xs">
+                  <th class="pb-3">KETERANGAN</th>
+                  <th class="pb-3">TIPE</th>
+                  <th class="pb-3 text-right">JUMLAH</th>
+                </tr>
+              </thead>
+              <tbody id="transactionList" class="divide-y divide-gray-100">
+                <tr><td colspan="3" class="py-4 text-center text-gray-400">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: GRUP UMKM -->
+        <div id="tab-umkm" class="hidden space-y-6">
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+            <div class="flex justify-between items-center border-b pb-4">
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Program Kemandirian UMKM</h3>
+                <p class="text-xs text-gray-500">Daftarkan usaha atau pengajuan tujuan UMKM Anda</p>
+              </div>
+              <button onclick="openModalUmkm()" class="bg-emerald-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-emerald-700 transition">+ Ajukan UMKM</button>
+            </div>
+            <div class="space-y-3">
+              <h4 class="text-xs font-semibold text-gray-400 uppercase">Daftar Pengajuan Anda</h4>
+              <div id="umkmList" class="space-y-2">
+                <p class="text-sm text-gray-400">Memuat data UMKM...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: EVENT & AGENDA -->
+        <div id="tab-event" class="hidden space-y-6">
+          <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
+            <div class="border-b pb-4">
+              <h3 class="text-lg font-bold text-gray-800">Agenda & Event Komunitas</h3>
+              <p class="text-xs text-gray-500">Ikuti seminar, pelatihan, dan kegiatan resmi The Circle Hub</p>
+            </div>
+            <div id="eventList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <p class="text-sm text-gray-400">Memuat event...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: PROFIL ANGGOTA LENGKAP -->
+        <div id="tab-profil" class="hidden bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
+          <div class="border-b border-gray-100 pb-4 flex items-center space-x-4">
+            <div class="relative">
+              <div id="profilePhotoPreview" class="w-20 h-20 rounded-full bg-blue-100 border-2 border-blue-600 text-blue-600 flex items-center justify-center text-3xl font-bold overflow-hidden shadow">
+                <i class="fa-solid fa-user"></i>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">Profil Keanggotaan & Identitas</h3>
+              <p class="text-xs text-gray-500">Upload foto profil & lengkapi verifikasi identitas Anda</p>
+            </div>
+          </div>
+
+          <form id="formProfil" class="space-y-4 max-w-xl">
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700">Foto Profil Anggota</label>
+                <p class="text-[11px] text-gray-500">Pilih foto dari HP/Laptop (Format JPG/PNG)</p>
+              </div>
+              <label class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center space-x-2">
+                <i class="fa-solid fa-camera"></i>
+                <span>Pilih Foto</span>
+                <input type="file" id="inputFotoFile" accept="image/*" class="hidden" onchange="uploadFotoProfil(this)">
+              </label>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Email Terdaftar</label>
+                <input type="text" id="profEmail" readonly class="w-full bg-gray-50 border rounded-xl px-4 py-2.5 text-sm text-gray-500">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lengkap</label>
+                <input type="text" id="profNama" required placeholder="Nama sesuai KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor WhatsApp / HP</label>
+                <input type="text" id="profHp" placeholder="081234567890" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Pekerjaan / Bidang Bisnis</label>
+                <input type="text" id="profBisnis" placeholder="Contoh: Driver / UMKM Kuliner" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <hr class="my-4 border-gray-100">
+            <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Verifikasi Identitas & Legalitas Dokumen</h4>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No KTP</label>
+                <input type="text" id="profKtp" placeholder="16 Digit NIK KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No Kartu Keluarga</label>
+                <input type="text" id="profKk" placeholder="16 Digit Nomor KK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No NPWP</label>
+                <input type="text" id="profNpwp" placeholder="Nomor NPWP Anggota" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No SKCK</label>
+                <input type="text" id="profSkck" placeholder="Nomor Surat SKCK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Ketenagakerjaan</label>
+                <input type="text" id="profBpjsTk" placeholder="Nomor Kartu BPJS TK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Kesehatan</label>
+                <input type="text" id="profBpjsKes" placeholder="Nomor Kartu BPJS Kesehatan" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <button type="submit" class="bg-blue-600 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition">Simpan Semua Data Profil</button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- NAVIGATION BAR BOTTOM (Mobile) -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-2 px-6 flex justify-between md:hidden z-40">
+    <button onclick="switchTab('home')" id="mob-home" class="flex flex-col items-center text-blue-600">
+      <i class="fa-solid fa-house text-lg"></i>
+      <span class="text-[10px] font-medium mt-0.5">Beranda</span>
+    </button>
+    <button onclick="switchTab('saldo')" id="mob-saldo" class="flex flex-col items-center text-gray-400">
+      <i class="fa-solid fa-wallet text-lg"></i>
+      <span class="text-[10px] font-medium mt-0.5">Kas</span>
+    </button>
+    <button onclick="switchTab('umkm')" id="mob-umkm" class="flex flex-col items-center text-gray-400">
+      <i class="fa-solid fa-store text-lg"></i>
+      <span class="text-[10px] font-medium mt-0.5">UMKM</span>
+    </button>
+    <button onclick="switchTab('event')" id="mob-event" class="flex flex-col items-center text-gray-400">
+      <i class="fa-solid fa-calendar-day text-lg"></i>
+      <span class="text-[10px] font-medium mt-0.5">Event</span>
+    </button>
+    <button onclick="switchTab('profil')" id="mob-profil" class="flex flex-col items-center text-gray-400">
+      <i class="fa-solid fa-user text-lg"></i>
+      <span class="text-[10px] font-medium mt-0.5">Profil</span>
+    </button>
+  </div>
+
+  <!-- MODAL TRANSAKSI -->
+  <div id="modalTransaksi" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
+      <h3 class="text-lg font-bold text-gray-800">Catat Transaksi Kas</h3>
+      <form id="formTx" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Jenis Transaksi</label>
+          <select id="txTipe" class="w-full border rounded-xl p-2.5 text-sm">
+            <option value="masuk">Uang Masuk (+)</option>
+            <option value="keluar">Uang Keluar (-)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Keterangan / Kategori</label>
+          <select id="txKetSelect" onchange="checkCustomKet()" class="w-full border rounded-xl p-2.5 text-sm mb-2">
+            <option value="Iuran Sukarela Harian">Iuran Sukarela Harian (Rp 10.000)</option>
+            <option value="Iuran Sukarela Awal">Iuran Sukarela Awal (Rp 100.000)</option>
+            <option value="Kas Solidaritas Driver">Kas Solidaritas Driver</option>
+            <option value="Lainnya">Lainnya (Ketik Manual)</option>
+          </select>
+          <input type="text" id="txKet" placeholder="Keterangan transaksi" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Jumlah (Rp)</label>
+          <input type="number" id="txJumlah" placeholder="10000" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button type="button" onclick="closeModal()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
+          <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL PENGAJUAN UMKM -->
+  <div id="modalUmkm" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
+      <h3 class="text-lg font-bold text-gray-800">Form Pengajuan UMKM</h3>
+      <form id="formUmkm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Usaha / Unit</label>
+          <input type="text" id="umkmNama" placeholder="Contoh: Warung Berkah Jaya" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Kategori Usaha</label>
+          <select id="umkmKategori" class="w-full border rounded-xl p-2.5 text-sm">
+            <option value="Kuliner / Makanan">Kuliner / Makanan</option>
+            <option value="Jasa / Service">Jasa / Service</option>
+            <option value="Perdagangan / Toko">Perdagangan / Toko</option>
+            <option value="Pengadaan Mobil / Kendaraan">Pengadaan Mobil / Kendaraan</option>
+            <option value="Modal Usaha Baru">Modal Usaha Baru</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Tujuan / Rencana Pengembangan</label>
+          <textarea id="umkmTujuan" rows="3" placeholder="Jelaskan kebutuhan modal atau pengembangan unit usaha Anda..." required class="w-full border rounded-xl p-2.5 text-sm"></textarea>
+        </div>
+        <div class="flex space-x-2 pt-2">
+          <button type="button" onclick="closeModalUmkm()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
+          <button type="submit" class="w-1/2 bg-emerald-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-emerald-700">Kirim Pengajuan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL QRIS FAST TOP-UP -->
+  <div id="modalQris" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4">
+      <h3 class="text-base font-bold text-gray-800">Scan QRIS Kas TCHI</h3>
+      <p class="text-xs text-gray-500">Scan kode QRIS ini menggunakan m-Banking atau e-Wallet Anda untuk isi saldo kas/iuran.</p>
+      
+      <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200 inline-block mx-auto">
+        <div class="w-48 h-48 bg-white border border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center space-y-2">
+          <i class="fa-solid fa-qrcode text-6xl text-slate-800"></i>
+          <span class="text-[10px] font-bold text-gray-400">QRIS OFFICIAL TCHI</span>
         </div>
       </div>
-    </section>
-  </main>
+
+      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer, saldo akan diverifikasi dan diinput oleh Admin.</p>
+
+      <button onclick="closeModalQris()" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium text-sm">Tutup</button>
+    </div>
+  </div>
 
   <script>
-    const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co";
+    const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co"; 
     const SUPABASE_ANON_KEY = "sb_publishable_XgB1KWcve2v-30R7PbbPew_oRaxz4WG";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let currentUser = null;
+    let userRegistrations = [];
+    let currentFotoUrl = "";
+    let currentPoin = 100;
+    let allUserTransactions = [];
 
-    async function loadUserProfile() {
-      const { data: { user } } = await _supabase.auth.getUser();
-      if (!user) { window.location.href = "login.html"; return; }
-      const { data: profile } = await _supabase.from('profiles').select('*').eq('id', user.id).single();
-      if (profile) {
-        document.getElementById('userName').innerText = profile.nama_lengkap || 'Anggota';
-        if (profile.role) document.getElementById('userRole').innerText = profile.role.toUpperCase();
+    async function checkAuth() {
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (!session) { window.location.href = "login.html"; } 
+      else {
+        currentUser = session.user;
+        document.getElementById('profEmail').value = currentUser.email;
+        loadProfile();
+        loadTransactions();
+        loadUmkm();
+        loadEvents();
+      }
+    }
+    checkAuth();
+
+    async function loadProfile() {
+      const { data } = await _supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+      if (data) {
+        document.getElementById('userNameDisplay').innerText = data.nama_lengkap || currentUser.email.split('@')[0];
+        document.getElementById('profNama').value = data.nama_lengkap || '';
+        document.getElementById('profHp').value = data.no_hp || '';
+        document.getElementById('profBisnis').value = data.pekerjaan_bisnis || '';
+        document.getElementById('profKtp').value = data.no_ktp || '';
+        document.getElementById('profKk').value = data.no_kk || '';
+        document.getElementById('profNpwp').value = data.no_npwp || '';
+        document.getElementById('profSkck').value = data.no_skck || '';
+        document.getElementById('profBpjsTk').value = data.bpjs_tk || '';
+        document.getElementById('profBpjsKes').value = data.bpjs_kes || '';
+        currentFotoUrl = data.foto_url || '';
+        currentPoin = data.poin !== undefined ? data.poin : 100;
+
+        document.getElementById('userPoinDisplay').innerText = `${currentPoin} Poin`;
+
+        if (data.role === 'admin') {
+          document.getElementById('nav-admin').classList.remove('hidden');
+          document.getElementById('userRoleDisplay').innerText = 'Pengurus Admin';
+        }
+
+        if (currentFotoUrl) {
+          const imgHtml = `<img src="${currentFotoUrl}" class="w-full h-full object-cover rounded-full">`;
+          document.getElementById('avatarHeader').innerHTML = imgHtml;
+          document.getElementById('profilePhotoPreview').innerHTML = imgHtml;
+        }
       }
     }
 
-    async function loadTotalAnggota() {
-      try {
-        const { count } = await _supabase.from('profiles').select('*', { count: 'exact', head: true });
-        document.getElementById('totalAnggotaCount').innerText = count || 0;
-      } catch (err) { console.error(err); }
+    async function uploadFotoProfil(input) {
+      if (!input.files || input.files.length === 0) return;
+
+      const file = input.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      document.getElementById('profilePhotoPreview').innerHTML = `<i class="fa-solid fa-spinner fa-spin text-2xl"></i>`;
+
+      const { data, error } = await _supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
+
+      if (error) {
+        alert("Gagal upload foto: " + error.message);
+        loadProfile();
+        return;
+      }
+
+      const { data: urlData } = _supabase.storage.from('avatars').getPublicUrl(filePath);
+      currentFotoUrl = urlData.publicUrl;
+
+      await _supabase.from('profiles').upsert({
+        id: currentUser.id,
+        foto_url: currentFotoUrl,
+        updated_at: new Date()
+      });
+
+      alert("Foto profil berhasil diperbarui!");
+      loadProfile();
+    }
+
+    document.getElementById('formProfil').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { error } = await _supabase.from('profiles').upsert({
+        id: currentUser.id,
+        nama_lengkap: document.getElementById('profNama').value,
+        no_hp: document.getElementById('profHp').value,
+        pekerjaan_bisnis: document.getElementById('profBisnis').value,
+        no_ktp: document.getElementById('profKtp').value,
+        no_kk: document.getElementById('profKk').value,
+        no_npwp: document.getElementById('profNpwp').value,
+        no_skck: document.getElementById('profSkck').value,
+        bpjs_tk: document.getElementById('profBpjsTk').value,
+        bpjs_kes: document.getElementById('profBpjsKes').value,
+        foto_url: currentFotoUrl,
+        updated_at: new Date()
+      });
+      if (!error) { alert("Data profil & identitas berhasil disimpan!"); loadProfile(); }
+      else { alert("Gagal menyimpan profil: " + error.message); }
+    });
+
+    async function loadTransactions() {
+      const { data, error } = await _supabase.from('transaksi').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      if (error) return;
+
+      allUserTransactions = data || [];
+      let total = 0;
+      let html = '';
+
+      if (allUserTransactions.length === 0) {
+        html = '<tr><td colspan="3" class="py-4 text-center text-gray-400">Belum ada transaksi</td></tr>';
+      } else {
+        allUserTransactions.forEach(tx => {
+          const isMasuk = tx.tipe === 'masuk';
+          if (isMasuk) total += Number(tx.jumlah);
+          else total -= Number(tx.jumlah);
+
+          html += `
+            <tr>
+              <td class="py-3 font-semibold text-gray-800">${tx.keterangan}</td>
+              <td class="py-3"><span class="${isMasuk ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} text-xs px-2.5 py-0.5 rounded-full font-medium">${isMasuk ? 'Masuk' : 'Keluar'}</span></td>
+              <td class="py-3 text-right font-bold ${isMasuk ? 'text-emerald-600' : 'text-rose-600'}">${isMasuk ? '+' : '-'} Rp ${Number(tx.jumlah).toLocaleString('id-ID')}</td>
+            </tr>
+          `;
+        });
+      }
+
+      document.getElementById('totalSaldoDisplay').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+      document.getElementById('transactionList').innerHTML = html;
+
+      renderIuranTracker();
+    }
+
+    function renderIuranTracker() {
+      const today = new Date();
+      let todayPaid = false;
+      let html7Days = '';
+
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(today.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        const dayLabel = d.toLocaleDateString('id-ID', { weekday: 'short' });
+
+        const paid = allUserTransactions.some(t => {
+          const tDate = new Date(t.created_at).toISOString().split('T')[0];
+          return tDate === dateStr && t.keterangan.includes('Iuran Sukarela Harian');
+        });
+
+        if (i === 0 && paid) todayPaid = true;
+
+        html7Days += `
+          <div class="bg-gray-50 border p-2 rounded-xl flex flex-col items-center">
+            <span class="text-[10px] text-gray-400 uppercase font-semibold">${dayLabel}</span>
+            <div class="mt-1">
+              ${paid ? 
+                '<i class="fa-solid fa-circle-check text-emerald-500 text-base"></i>' : 
+                '<i class="fa-regular fa-circle text-gray-300 text-base"></i>'}
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('tracker7Hari').innerHTML = html7Days;
+
+      if (todayPaid) {
+        document.getElementById('statusBadgeHariIni').innerHTML = `<span class="bg-emerald-100 text-emerald-700 text-xs px-2.5 py-1 rounded-full font-bold"><i class="fa-solid fa-check mr-1"></i>Lunas Hari Ini</span>`;
+        document.getElementById('btnBayarIuranCepat').disabled = true;
+        document.getElementById('btnBayarIuranCepat').className = "w-full sm:w-auto bg-gray-200 text-gray-500 text-xs font-bold px-5 py-3 rounded-xl cursor-not-allowed flex items-center justify-center space-x-2";
+        document.getElementById('btnBayarIuranCepat').innerHTML = `<i class="fa-solid fa-check"></i><span>Iuran Hari Ini Lunas</span>`;
+      } else {
+        document.getElementById('statusBadgeHariIni').innerHTML = `<span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-bold">Belum Bayar</span>`;
+      }
+    }
+
+    async function bayarIuranHarianCepat() {
+      // 1. Tambah Transaksi Uang Masuk
+      const { error: txErr } = await _supabase.from('transaksi').insert([{
+        user_id: currentUser.id,
+        tipe: 'masuk',
+        keterangan: 'Iuran Sukarela Harian (Rp 10.000)',
+        jumlah: 10000
+      }]);
+
+      if (txErr) {
+        alert("Gagal memproses pembayaran: " + txErr.message);
+        return;
+      }
+
+      // 2. Tambah +10 Poin Komunitas
+      const newPoin = currentPoin + 10;
+      await _supabase.from('profiles').upsert({
+        id: currentUser.id,
+        poin: newPoin,
+        updated_at: new Date()
+      });
+
+      alert("Terima kasih! Iuran harian Rp 10.000 berhasil terbayar. Anda mendapatkan +10 Poin!");
+      loadProfile();
+      loadTransactions();
+    }
+
+    async function loadUmkm() {
+      const { data, error } = await _supabase.from('umkm_pengajuan').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      if (error) return;
+
+      let html = '';
+      if (data.length === 0) {
+        html = '<p class="text-xs text-gray-400 py-3">Belum ada pengajuan UMKM.</p>';
+      } else {
+        data.forEach(item => {
+          html += `
+            <div class="p-3 border rounded-xl flex justify-between items-center">
+              <div>
+                <h5 class="font-bold text-sm text-gray-800">${item.nama_usaha}</h5>
+                <p class="text-xs text-gray-500">${item.kategori_usaha} • ${item.tujuan_pengajuan}</p>
+              </div>
+              <span class="bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-semibold">${item.status}</span>
+            </div>
+          `;
+        });
+      }
+      document.getElementById('umkmList').innerHTML = html;
+    }
+
+    async function loadEvents() {
+      const { data: regData } = await _supabase.from('event_registrations').select('event_id').eq('user_id', currentUser.id);
+      userRegistrations = regData ? regData.map(r => r.event_id) : [];
+
+      const { data, error } = await _supabase.from('events').select('*').order('tanggal', { ascending: true });
+      if (error) return;
+
+      let html = '';
+      if (data.length === 0) {
+        html = '<p class="text-xs text-gray-400 py-3">Belum ada agenda event terbaru.</p>';
+      } else {
+        data.forEach(item => {
+          const isRegistered = userRegistrations.includes(item.id);
+          const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+
+          html += `
+            <div class="border rounded-2xl p-4 flex flex-col justify-between space-y-3 bg-gray-50">
+              <div>
+                <span class="bg-purple-100 text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-md">${tgl}</span>
+                <h4 class="font-bold text-sm text-gray-800 mt-1">${item.judul}</h4>
+                <p class="text-xs text-gray-500 mt-1">${item.deskripsi || ''}</p>
+                <p class="text-xs text-gray-400 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>${item.lokasi}</p>
+              </div>
+              <div>
+                ${isRegistered ? 
+                  `<button disabled class="w-full bg-emerald-100 text-emerald-700 text-xs font-semibold py-2 rounded-xl"><i class="fa-solid fa-check mr-1"></i>Sudah Terdaftar</button>` :
+                  `<button onclick="daftarEvent('${item.id}')" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold py-2 rounded-xl transition">Daftar Sekarang</button>`
+                }
+              </div>
+            </div>
+          `;
+        });
+      }
+      document.getElementById('eventList').innerHTML = html;
+    }
+
+    async function daftarEvent(eventId) {
+      const { error } = await _supabase.from('event_registrations').insert([{ event_id: eventId, user_id: currentUser.id }]);
+      if (!error) {
+        alert("Berhasil terdaftar dalam event!");
+        loadEvents();
+      } else {
+        alert("Gagal mendaftar: " + error.message);
+      }
+    }
+
+    function checkCustomKet() {
+      const val = document.getElementById('txKetSelect').value;
+      if (val !== 'Lainnya') {
+        document.getElementById('txKet').value = val;
+        if(val.includes('10.000')) document.getElementById('txJumlah').value = 10000;
+        else if(val.includes('100.000')) document.getElementById('txJumlah').value = 100000;
+      } else {
+        document.getElementById('txKet').value = '';
+      }
+    }
+
+    document.getElementById('formTx').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const tipe = document.getElementById('txTipe').value;
+      const keterangan = document.getElementById('txKet').value;
+      const jumlah = document.getElementById('txJumlah').value;
+
+      await _supabase.from('transaksi').insert([{ user_id: currentUser.id, tipe, keterangan, jumlah }]);
+      closeModal();
+      document.getElementById('formTx').reset();
+      loadTransactions();
+    });
+
+    document.getElementById('formUmkm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nama_usaha = document.getElementById('umkmNama').value;
+      const kategori_usaha = document.getElementById('umkmKategori').value;
+      const tujuan_pengajuan = document.getElementById('umkmTujuan').value;
+
+      const { error } = await _supabase.from('umkm_pengajuan').insert([{ user_id: currentUser.id, nama_usaha, kategori_usaha, tujuan_pengajuan }]);
+      if(!error) {
+        alert("Pengajuan UMKM berhasil dikirim!");
+        closeModalUmkm();
+        document.getElementById('formUmkm').reset();
+        loadUmkm();
+      } else {
+        alert("Gagal mengirim pengajuan: " + error.message);
+      }
+    });
+
+    function openModal() { checkCustomKet(); document.getElementById('modalTransaksi').classList.remove('hidden'); document.getElementById('modalTransaksi').classList.add('flex'); }
+    function closeModal() { document.getElementById('modalTransaksi').classList.add('hidden'); document.getElementById('modalTransaksi').classList.remove('flex'); }
+
+    function openModalSolidaritas() {
+      document.getElementById('txKetSelect').value = 'Kas Solidaritas Driver';
+      checkCustomKet();
+      openModal();
+    }
+
+    function openModalUmkm() { document.getElementById('modalUmkm').classList.remove('hidden'); document.getElementById('modalUmkm').classList.add('flex'); }
+    function closeModalUmkm() { document.getElementById('modalUmkm').classList.add('hidden'); document.getElementById('modalUmkm').classList.remove('flex'); }
+
+    function openModalQris() { document.getElementById('modalQris').classList.remove('hidden'); document.getElementById('modalQris').classList.add('flex'); }
+    function closeModalQris() { document.getElementById('modalQris').classList.add('hidden'); document.getElementById('modalQris').classList.remove('flex'); }
+
+    function switchTab(tab) {
+      document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
+      document.getElementById('tab-saldo').classList.toggle('hidden', tab !== 'saldo');
+      document.getElementById('tab-umkm').classList.toggle('hidden', tab !== 'umkm');
+      document.getElementById('tab-event').classList.toggle('hidden', tab !== 'event');
+      document.getElementById('tab-profil').classList.toggle('hidden', tab !== 'profil');
+
+      document.getElementById('mob-home').className = tab === 'home' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
+      document.getElementById('mob-saldo').className = tab === 'saldo' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
+      document.getElementById('mob-umkm').className = tab === 'umkm' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
+      document.getElementById('mob-event').className = tab === 'event' ? 'flex flex-col items-center text-purple-600' : 'flex flex-col items-center text-gray-400';
+      document.getElementById('mob-profil').className = tab === 'profil' ? 'flex flex-col items-center text-blue-600' : 'flex flex-col items-center text-gray-400';
     }
 
     document.getElementById('btnLogout').addEventListener('click', async () => {
       await _supabase.auth.signOut();
       window.location.href = "login.html";
     });
-
-    loadUserProfile();
-    loadTotalAnggota();
   </script>
 </body>
 </html>
