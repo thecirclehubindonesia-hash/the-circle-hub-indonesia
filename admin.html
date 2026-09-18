@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - The Circle Hub Indonesia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-100 font-sans antialiased">
+
+  <div class="min-h-screen flex flex-col">
+    <!-- HEADER ADMIN -->
+    <header class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between shadow-md">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">A</div>
+        <div>
+          <h1 class="text-base font-bold tracking-wide">Admin Panel Superapp</h1>
+          <p class="text-xs text-slate-400">The Circle Hub Indonesia</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="dashboard.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl transition">
+          <i class="fa-solid fa-arrow-left mr-1"></i>Ke Dashboard
+        </a>
+        <button id="btnLogout" class="bg-rose-600/20 text-rose-300 hover:bg-rose-600 hover:text-white text-xs px-3 py-2 rounded-xl transition">
+          Keluar
+        </button>
+      </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main class="flex-1 p-4 md:p-8 max-w-6xl w-full mx-auto space-y-6">
+
+      <!-- RINGKASAN STATISTIK -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs text-slate-500 font-medium">Total Anggota Terdaftar</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1" id="statTotalUser">0</h3>
+          </div>
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs text-slate-500 font-medium">Total Pengajuan UMKM</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1" id="statTotalUmkm">0</h3>
+          </div>
+          <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fa-solid fa-store"></i>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs text-slate-500 font-medium">Total Transaksi Kas</p>
+            <h3 class="text-2xl font-extrabold text-slate-800 mt-1" id="statTotalTx">0</h3>
+          </div>
+          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl">
+            <i class="fa-solid fa-receipt"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABEL ANGGOTA & KELOLA SALDO -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex justify-between items-center border-b pb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-800">Manajemen Anggota & Penyesuaian Saldo</h3>
+            <p class="text-xs text-slate-500">Pilih anggota untuk menyesuaikan saldo kas atau melihat dokumen identitas</p>
+          </div>
+          <input type="text" id="searchBox" onkeyup="filterUserList()" placeholder="Cari Nama / Email..." class="border rounded-xl px-3 py-1.5 text-xs w-48 md:w-64">
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead>
+              <tr class="text-slate-400 border-b text-xs uppercase tracking-wider">
+                <th class="pb-3">Anggota</th>
+                <th class="pb-3">Kontak & Bisnis</th>
+                <th class="pb-3">Status Dokumen</th>
+                <th class="pb-3 text-right">Saldo Saat Ini</th>
+                <th class="pb-3 text-center">Aksi Saldo</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody" class="divide-y divide-slate-100">
+              <tr><td colspan="5" class="py-6 text-center text-slate-400">Memuat data anggota...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MODAL PENYESUAIAN SALDO -->
+  <div id="modalAdjustSaldo" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
+      <div class="border-b pb-3">
+        <h3 class="text-base font-bold text-slate-800">Penyesuaian Saldo Anggota</h3>
+        <p class="text-xs text-slate-500" id="modalTargetUser">Target: -</p>
+      </div>
+
+      <form id="formAdjustSaldo" class="space-y-3">
+        <input type="hidden" id="targetUserId">
+        
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Aksi Penyesuaian</label>
+          <select id="adjTipe" class="w-full border rounded-xl p-2.5 text-sm">
+            <option value="masuk">Tambah Saldo (+ Kredit)</option>
+            <option value="keluar">Kurangi Saldo (- Debit)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Nominal (Rp)</label>
+          <input type="number" id="adjJumlah" min="1" placeholder="Contoh: 100000" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-500 mb-1">Keterangan / Alasan</label>
+          <input type="text" id="adjKeterangan" placeholder="Contoh: Koreksi Admin / Top Up Manual" required class="w-full border rounded-xl p-2.5 text-sm">
+        </div>
+
+        <div class="flex space-x-2 pt-2">
+          <button type="button" onclick="closeModalAdjust()" class="w-1/2 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
+          <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Eksekusi Penyesuaian</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://btkmwasloxwrwmffthsu.supabase.co"; 
+    const SUPABASE_ANON_KEY = "sb_publishable_XgB1KWcve2v-30R7PbbPew_oRaxz4WG";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let allProfiles = [];
+    let allTransactions = [];
+
+    async function checkAdminAuth() {
+      const { data: { session } } = await _supabase.auth.getSession();
+      if (!session) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Validasi Role Admin
+      const { data: profile } = await _supabase.from('profiles').select('role').eq('id', session.user.id).single();
+      if (!profile || profile.role !== 'admin') {
+        alert("Akses ditolak! Halaman ini khusus Admin.");
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      loadData();
+    }
+    checkAdminAuth();
+
+    async function loadData() {
+      // 1. Fetch data profil
+      const { data: profiles } = await _supabase.from('profiles').select('*');
+      allProfiles = profiles || [];
+
+      // 2. Fetch transaksi
+      const { data: txs } = await _supabase.from('transaksi').select('*');
+      allTransactions = txs || [];
+
+      // 3. Fetch total UMKM
+      const { data: umkms } = await _supabase.from('umkm_pengajuan').select('id');
+
+      // Update statistik
+      document.getElementById('statTotalUser').innerText = allProfiles.length;
+      document.getElementById('statTotalTx').innerText = allTransactions.length;
+      document.getElementById('statTotalUmkm').innerText = umkms ? umkms.length : 0;
+
+      renderUserTable(allProfiles);
+    }
+
+    function calculateUserSaldo(userId) {
+      let total = 0;
+      allTransactions.filter(t => t.user_id === userId).forEach(t => {
+        if (t.tipe === 'masuk') total += Number(t.jumlah);
+        else total -= Number(t.jumlah);
+      });
+      return total;
+    }
+
+    function renderUserTable(profilesList) {
+      let html = '';
+
+      if (profilesList.length === 0) {
+        html = '<tr><td colspan="5" class="py-6 text-center text-slate-400">Tidak ada anggota ditemukan.</td></tr>';
+      } else {
+        profilesList.forEach(p => {
+          const saldo = calculateUserSaldo(p.id);
+          const hasKtp = p.no_ktp ? 'KTP' : '';
+          const hasKk = p.no_kk ? 'KK' : '';
+          const hasNpwp = p.no_npwp ? 'NPWP' : '';
+          const docs = [hasKtp, hasKk, hasNpwp].filter(Boolean).join(', ') || 'Belum Dilengkapi';
+
+          const avatar = p.foto_url ? 
+            `<img src="${p.foto_url}" class="w-9 h-9 rounded-full object-cover">` : 
+            `<div class="w-9 h-9 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs"><i class="fa-solid fa-user"></i></div>`;
+
+          html += `
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 flex items-center space-x-3">
+                ${avatar}
+                <div>
+                  <p class="font-bold text-slate-800 text-sm">${p.nama_lengkap || 'Belum isi nama'}</p>
+                  <p class="text-xs text-slate-400">${p.id.substring(0, 8)}...</p>
+                </div>
+              </td>
+              <td class="py-3.5 text-xs">
+                <p class="font-medium text-slate-700">${p.no_hp || '-'}</p>
+                <p class="text-slate-400">${p.pekerjaan_bisnis || '-'}</p>
+              </td>
+              <td class="py-3.5 text-xs">
+                <span class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md font-semibold">${docs}</span>
+              </td>
+              <td class="py-3.5 text-right font-bold text-slate-800 text-sm">
+                Rp ${saldo.toLocaleString('id-ID')}
+              </td>
+              <td class="py-3.5 text-center">
+                <button onclick="openModalAdjust('${p.id}', '${p.nama_lengkap || 'Anggota'}')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-xl font-medium transition">
+                  <i class="fa-solid fa-sliders mr-1"></i>Sesuaikan Saldo
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      }
+
+      document.getElementById('userTableBody').innerHTML = html;
+    }
+
+    function filterUserList() {
+      const q = document.getElementById('searchBox').value.toLowerCase();
+      const filtered = allProfiles.filter(p => 
+        (p.nama_lengkap && p.nama_lengkap.toLowerCase().includes(q)) || 
+        (p.pekerjaan_bisnis && p.pekerjaan_bisnis.toLowerCase().includes(q))
+      );
+      renderUserTable(filtered);
+    }
+
+    function openModalAdjust(userId, userName) {
+      document.getElementById('targetUserId').value = userId;
+      document.getElementById('modalTargetUser').innerText = `Target: ${userName}`;
+      document.getElementById('modalAdjustSaldo').classList.remove('hidden');
+      document.getElementById('modalAdjustSaldo').classList.add('flex');
+    }
+
+    function closeModalAdjust() {
+      document.getElementById('modalAdjustSaldo').classList.add('hidden');
+      document.getElementById('modalAdjustSaldo').classList.remove('flex');
+      document.getElementById('formAdjustSaldo').reset();
+    }
+
+    document.getElementById('formAdjustSaldo').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = document.getElementById('targetUserId').value;
+      const tipe = document.getElementById('adjTipe').value;
+      const jumlah = document.getElementById('adjJumlah').value;
+      const keterangan = document.getElementById('adjKeterangan').value;
+
+      const { error } = await _supabase.from('transaksi').insert([{
+        user_id: userId,
+        tipe,
+        keterangan: `[Admin] ${keterangan}`,
+        jumlah
+      }]);
+
+      if (!error) {
+        alert("Saldo anggota berhasil disesuaikan!");
+        closeModalAdjust();
+        loadData();
+      } else {
+        alert("Gagal menyesuaikan saldo: " + error.message);
+      }
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await _supabase.auth.signOut();
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
