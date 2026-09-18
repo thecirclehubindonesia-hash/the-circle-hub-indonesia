@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Library QR Code Generator -->
-  <script src="https://cdn.jsdelivr.net/npm/easyqrcodejs@4.5.0/dist/easy.qrcode.min.js"></script>
 </head>
 <body class="bg-gray-100 font-sans antialiased pb-20 md:pb-0">
 
@@ -437,7 +435,7 @@
     </div>
   </div>
 
-  <!-- MODAL QRIS FAST TOP-UP (GENERATED DYNAMIC QR CODE) -->
+  <!-- MODAL QRIS RESMI THE CIRCLE HUB INDONESIA -->
   <div id="modalQris" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
@@ -445,30 +443,14 @@
         <button onclick="closeModalQris()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <p class="text-xs text-gray-500">Scan kode QR ini menggunakan m-Banking (BCA, Mandiri, BRI, dll) atau e-Wallet (Gopay, OVO, Dana) Anda.</p>
+      <p class="text-xs text-gray-500">Scan QRIS resmi di bawah ini menggunakan e-Wallet (Gopay, OVO, Dana, ShopeePay) atau M-Banking Anda.</p>
       
-      <!-- WADAH KODE QR -->
-      <div class="bg-gradient-to-b from-gray-50 to-blue-50/30 p-4 rounded-2xl border border-gray-200 inline-block mx-auto shadow-inner">
-        <div id="qrcodeContainer" class="flex justify-center p-2 bg-white rounded-xl shadow-sm border">
-          <!-- QR Code di-generate otomatis oleh JS -->
-        </div>
-        <div class="mt-2 text-center">
-          <span class="text-[10px] font-bold text-slate-700 uppercase tracking-widest bg-slate-200/80 px-2.5 py-0.5 rounded-md">QRIS NATIONAL STANDARD</span>
-        </div>
+      <!-- GAMBAR QRIS RESMI TCHI -->
+      <div class="p-2 bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-inner flex justify-center">
+        <img src="qris.jpeg" alt="QRIS Resmi The Circle Hub Indonesia" class="w-full max-w-[280px] h-auto rounded-xl shadow-sm object-contain">
       </div>
 
-      <div class="bg-blue-50 border border-blue-100 p-3 rounded-xl text-left text-xs space-y-1">
-        <div class="flex justify-between">
-          <span class="text-gray-500">Penerima:</span>
-          <span class="font-bold text-gray-800">The Circle Hub ID</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-gray-500">NMI:</span>
-          <span class="font-bold text-gray-800">ID102439201923</span>
-        </div>
-      </div>
-
-      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer, catat transaksi di menu Kas atau konfirmasi via WhatsApp Pengurus.</p>
+      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer selesai, catat transaksi di menu Kas atau konfirmasi via WhatsApp Pengurus.</p>
 
       <div class="flex space-x-2 pt-1">
         <button onclick="closeModalQris()" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl font-bold text-xs transition">Tutup</button>
@@ -485,7 +467,6 @@
     let currentFotoUrl = "";
     let currentPoin = 100;
     let allUserTransactions = [];
-    let qrInstance = null;
 
     async function checkAuth() {
       const { data: { session } } = await _supabase.auth.getSession();
@@ -806,32 +787,11 @@
     function openModalQris() { 
       document.getElementById('modalQris').classList.remove('hidden'); 
       document.getElementById('modalQris').classList.add('flex'); 
-      
-      // Generate QR Code secara Instan & Otomatis
-      generateQrisCode();
     }
     
     function closeModalQris() { 
       document.getElementById('modalQris').classList.add('hidden'); 
       document.getElementById('modalQris').classList.remove('flex'); 
-    }
-
-    function generateQrisCode() {
-      const qrcodeContainer = document.getElementById('qrcodeContainer');
-      qrcodeContainer.innerHTML = ''; // Bersihkan QR sebelumnya jika ada
-
-      // Payload standar QRIS / TCHI Transfer String
-      const userEmail = currentUser ? currentUser.email : "user@thecirclehub.id";
-      const qrisData = `00020101021126580016ID.CO.QRIS.WWW01189360091100000000020303UMI51440014ID1024392019235204581253033605802ID5919THE CIRCLE HUB ID6007JAKARTA61051211062070703A016304EB4C_USER:${userEmail}`;
-
-      new QRCode(qrcodeContainer, {
-        text: qrisData,
-        width: 190,
-        height: 190,
-        colorDark: "#0f172a",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-      });
     }
 
     function switchTab(tab) {
