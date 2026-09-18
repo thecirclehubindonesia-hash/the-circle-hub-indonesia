@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Library Scanner Barcode/QR Kamera -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body class="bg-gray-100 font-sans antialiased pb-20 md:pb-0">
 
@@ -61,8 +63,8 @@
           </div>
         </div>
         <div class="flex items-center space-x-3">
-          <button onclick="openModalQris()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200" title="Scan QRIS">
-            <i class="fa-solid fa-qrcode"></i>
+          <button onclick="openCameraScanner()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200" title="Scan Kamera Barcode">
+            <i class="fa-solid fa-camera"></i>
           </button>
         </div>
       </header>
@@ -85,13 +87,14 @@
               </div>
             </div>
 
+            <!-- GRID 4 TOMBOL (TRANSFER, SCAN KAMERA, RIWAYAT, TOP UP) -->
             <div class="grid grid-cols-4 gap-2 pt-2 border-t border-white/15 text-center text-xs">
-              <button onclick="openModal()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
-                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-plus"></i></div>
-                <span>Tambah</span>
+              <button onclick="openModalTransfer()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-paper-plane"></i></div>
+                <span>Transfer</span>
               </button>
-              <button onclick="openModalQris()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
-                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-qrcode"></i></div>
+              <button onclick="openCameraScanner()" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center mb-1"><i class="fa-solid fa-expand"></i></div>
                 <span>Scan QR</span>
               </button>
               <button onclick="switchTab('saldo')" class="flex flex-col items-center py-2 hover:bg-white/10 rounded-xl transition">
@@ -204,7 +207,7 @@
         <div id="tab-saldo" class="hidden space-y-6">
           <div class="flex justify-between items-center">
             <h3 class="text-lg font-bold text-gray-800">Catatan Kas & Transaksi</h3>
-            <button onclick="openModal()" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-blue-700 transition">+ Tambah Transaksi</button>
+            <button onclick="openModalTransfer()" class="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-sm hover:bg-blue-700 transition">+ Kirim Transfer</button>
           </div>
           <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <table class="w-full text-left text-sm">
@@ -370,68 +373,55 @@
     </button>
   </div>
 
-  <!-- MODAL TRANSAKSI -->
-  <div id="modalTransaksi" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+  <!-- MODAL TRANSFER KAS ANGGOTA -->
+  <div id="modalTransfer" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
-      <h3 class="text-lg font-bold text-gray-800">Catat Transaksi Kas</h3>
-      <form id="formTx" class="space-y-3">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-bold text-gray-800">Transfer Saldo Kas</h3>
+        <button onclick="closeModalTransfer()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="formTransfer" class="space-y-3">
         <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Jenis Transaksi</label>
-          <select id="txTipe" class="w-full border rounded-xl p-2.5 text-sm">
-            <option value="masuk">Uang Masuk (+)</option>
-            <option value="keluar">Uang Keluar (-)</option>
-          </select>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Tujuan Transfer / Penerima</label>
+          <input type="text" id="trfTujuan" placeholder="Email / Nomor HP Anggota Penerima" required class="w-full border rounded-xl p-2.5 text-sm">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Keterangan / Kategori</label>
-          <select id="txKetSelect" onchange="checkCustomKet()" class="w-full border rounded-xl p-2.5 text-sm mb-2">
-            <option value="Iuran Sukarela Harian">Iuran Sukarela Harian (Rp 10.000)</option>
-            <option value="Iuran Sukarela Awal">Iuran Sukarela Awal (Rp 100.000)</option>
-            <option value="Kas Solidaritas Driver">Kas Solidaritas Driver</option>
-            <option value="Lainnya">Lainnya (Ketik Manual)</option>
-          </select>
-          <input type="text" id="txKet" placeholder="Keterangan transaksi" required class="w-full border rounded-xl p-2.5 text-sm">
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Nominal Transfer (Rp)</label>
+          <input type="number" id="trfJumlah" min="1000" placeholder="Contoh: 50000" required class="w-full border rounded-xl p-2.5 text-sm">
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Jumlah (Rp)</label>
-          <input type="number" id="txJumlah" placeholder="10000" required class="w-full border rounded-xl p-2.5 text-sm">
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Catatan / Pesan</label>
+          <input type="text" id="trfCatatan" placeholder="Contoh: Bayar Iuran / Kas Sesama" class="w-full border rounded-xl p-2.5 text-sm">
         </div>
         <div class="flex space-x-2 pt-2">
-          <button type="button" onclick="closeModal()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
-          <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Simpan</button>
+          <button type="button" onclick="closeModalTransfer()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
+          <button type="submit" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-blue-700">Kirim Transfer</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL PENGAJUAN UMKM -->
-  <div id="modalUmkm" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full space-y-4">
-      <h3 class="text-lg font-bold text-gray-800">Form Pengajuan UMKM</h3>
-      <form id="formUmkm" class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Usaha / Unit</label>
-          <input type="text" id="umkmNama" placeholder="Contoh: Warung Berkah Jaya" required class="w-full border rounded-xl p-2.5 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Kategori Usaha</label>
-          <select id="umkmKategori" class="w-full border rounded-xl p-2.5 text-sm">
-            <option value="Kuliner / Makanan">Kuliner / Makanan</option>
-            <option value="Jasa / Service">Jasa / Service</option>
-            <option value="Perdagangan / Toko">Perdagangan / Toko</option>
-            <option value="Pengadaan Mobil / Kendaraan">Pengadaan Mobil / Kendaraan</option>
-            <option value="Modal Usaha Baru">Modal Usaha Baru</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-gray-500 mb-1">Tujuan / Rencana Pengembangan</label>
-          <textarea id="umkmTujuan" rows="3" placeholder="Jelaskan kebutuhan modal atau pengembangan unit usaha Anda..." required class="w-full border rounded-xl p-2.5 text-sm"></textarea>
-        </div>
-        <div class="flex space-x-2 pt-2">
-          <button type="button" onclick="closeModalUmkm()" class="w-1/2 bg-gray-100 text-gray-600 py-2.5 rounded-xl font-medium text-sm">Batal</button>
-          <button type="submit" class="w-1/2 bg-emerald-600 text-white py-2.5 rounded-xl font-medium text-sm hover:bg-emerald-700">Kirim Pengajuan</button>
-        </div>
-      </form>
+  <!-- MODAL SCANNER KAMERA BARCODE & QR -->
+  <div id="modalCameraScanner" class="fixed inset-0 bg-black/70 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl p-5 max-w-sm w-full text-center space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-base font-bold text-gray-800"><i class="fa-solid fa-camera mr-2 text-blue-600"></i>Scan QR / Barcode</h3>
+        <button onclick="closeCameraScanner()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <p class="text-xs text-gray-500">Arahkan kamera HP/Laptop Anda ke QR Code atau Barcode anggota.</p>
+      
+      <!-- WADAH KAMERA -->
+      <div class="bg-black rounded-2xl overflow-hidden border-2 border-blue-500 shadow-md">
+        <div id="reader" class="w-full"></div>
+      </div>
+
+      <div id="scanResult" class="text-xs text-blue-600 font-semibold bg-blue-50 p-2 rounded-xl hidden">
+        Hasil: <span id="scanResultText"></span>
+      </div>
+
+      <button onclick="closeCameraScanner()" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium text-xs">Tutup Kamera</button>
     </div>
   </div>
 
@@ -445,9 +435,8 @@
 
       <p class="text-xs text-gray-500">Scan QRIS resmi di bawah ini menggunakan e-Wallet (Gopay, OVO, Dana, ShopeePay) atau M-Banking Anda.</p>
       
-      <!-- GAMBAR QRIS RESMI TCHI -->
       <div class="p-2 bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-inner flex justify-center">
-        <img src="https://btkmwasloxwrwmffthsu.supabase.co/storage/v1/object/public/qris.jpeg/qris.jpeg.jpeg">
+        <img src="qris.jpeg" alt="QRIS Resmi The Circle Hub Indonesia" class="w-full max-w-[280px] h-auto rounded-xl shadow-sm object-contain">
       </div>
 
       <p class="text-[11px] text-blue-600 font-medium">Setelah transfer selesai, catat transaksi di menu Kas atau konfirmasi via WhatsApp Pengurus.</p>
@@ -467,6 +456,7 @@
     let currentFotoUrl = "";
     let currentPoin = 100;
     let allUserTransactions = [];
+    let html5QrcodeScanner = null;
 
     async function checkAuth() {
       const { data: { session } } = await _supabase.auth.getSession();
@@ -663,6 +653,86 @@
       loadTransactions();
     }
 
+    // PENANGANAN SCANNER KAMERA
+    function openCameraScanner() {
+      document.getElementById('modalCameraScanner').classList.remove('hidden');
+      document.getElementById('modalCameraScanner').classList.add('flex');
+
+      if (!html5QrcodeScanner) {
+        html5QrcodeScanner = new Html5Qrcode("reader");
+      }
+
+      html5QrcodeScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        onScanSuccess,
+        onScanFailure
+      ).catch(err => {
+        console.error("Gagal membuka kamera: ", err);
+        alert("Akses kamera ditolak atau tidak ditemukan.");
+      });
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+      document.getElementById('scanResult').classList.remove('hidden');
+      document.getElementById('scanResultText').innerText = decodedText;
+      alert("Hasil Scan Barcode: " + decodedText);
+      closeCameraScanner();
+    }
+
+    function onScanFailure(error) {
+      // Pembacaan rutin per-frame
+    }
+
+    function closeCameraScanner() {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          document.getElementById('modalCameraScanner').classList.add('hidden');
+          document.getElementById('modalCameraScanner').classList.remove('flex');
+        }).catch(err => {
+          document.getElementById('modalCameraScanner').classList.add('hidden');
+          document.getElementById('modalCameraScanner').classList.remove('flex');
+        });
+      } else {
+        document.getElementById('modalCameraScanner').classList.add('hidden');
+        document.getElementById('modalCameraScanner').classList.remove('flex');
+      }
+    }
+
+    // MODAL TRANSFER
+    function openModalTransfer() {
+      document.getElementById('modalTransfer').classList.remove('hidden');
+      document.getElementById('modalTransfer').classList.add('flex');
+    }
+
+    function closeModalTransfer() {
+      document.getElementById('modalTransfer').classList.add('hidden');
+      document.getElementById('modalTransfer').classList.remove('flex');
+      document.getElementById('formTransfer').reset();
+    }
+
+    document.getElementById('formTransfer').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const tujuan = document.getElementById('trfTujuan').value;
+      const jumlah = document.getElementById('trfJumlah').value;
+      const catatan = document.getElementById('trfCatatan').value;
+
+      const { error } = await _supabase.from('transaksi').insert([{
+        user_id: currentUser.id,
+        tipe: 'keluar',
+        keterangan: `Transfer ke ${tujuan} (${catatan || 'Kirim Saldo'})`,
+        jumlah: jumlah
+      }]);
+
+      if (!error) {
+        alert("Transfer saldo sebesar Rp " + Number(jumlah).toLocaleString('id-ID') + " berhasil dikirim!");
+        closeModalTransfer();
+        loadTransactions();
+      } else {
+        alert("Gagal melakukan transfer: " + error.message);
+      }
+    });
+
     async function loadUmkm() {
       const { data, error } = await _supabase.from('umkm_pengajuan').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
       if (error) return;
@@ -732,67 +802,17 @@
       }
     }
 
-    function checkCustomKet() {
-      const val = document.getElementById('txKetSelect').value;
-      if (val !== 'Lainnya') {
-        document.getElementById('txKet').value = val;
-        if(val.includes('10.000')) document.getElementById('txJumlah').value = 10000;
-        else if(val.includes('100.000')) document.getElementById('txJumlah').value = 100000;
-      } else {
-        document.getElementById('txKet').value = '';
-      }
-    }
-
-    document.getElementById('formTx').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const tipe = document.getElementById('txTipe').value;
-      const keterangan = document.getElementById('txKet').value;
-      const jumlah = document.getElementById('txJumlah').value;
-
-      await _supabase.from('transaksi').insert([{ user_id: currentUser.id, tipe, keterangan, jumlah }]);
-      closeModal();
-      document.getElementById('formTx').reset();
-      loadTransactions();
-    });
-
-    document.getElementById('formUmkm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const nama_usaha = document.getElementById('umkmNama').value;
-      const kategori_usaha = document.getElementById('umkmKategori').value;
-      const tujuan_pengajuan = document.getElementById('umkmTujuan').value;
-
-      const { error } = await _supabase.from('umkm_pengajuan').insert([{ user_id: currentUser.id, nama_usaha, kategori_usaha, tujuan_pengajuan }]);
-      if(!error) {
-        alert("Pengajuan UMKM berhasil dikirim!");
-        closeModalUmkm();
-        document.getElementById('formUmkm').reset();
-        loadUmkm();
-      } else {
-        alert("Gagal mengirim pengajuan: " + error.message);
-      }
-    });
-
-    function openModal() { checkCustomKet(); document.getElementById('modalTransaksi').classList.remove('hidden'); document.getElementById('modalTransaksi').classList.add('flex'); }
-    function closeModal() { document.getElementById('modalTransaksi').classList.add('hidden'); document.getElementById('modalTransaksi').classList.remove('flex'); }
-
     function openModalSolidaritas() {
-      document.getElementById('txKetSelect').value = 'Kas Solidaritas Driver';
-      checkCustomKet();
-      openModal();
+      openModalTransfer();
+      document.getElementById('trfTujuan').value = 'Kas Solidaritas Driver TCHI';
+      document.getElementById('trfCatatan').value = 'Donasi Solidaritas';
     }
 
     function openModalUmkm() { document.getElementById('modalUmkm').classList.remove('hidden'); document.getElementById('modalUmkm').classList.add('flex'); }
     function closeModalUmkm() { document.getElementById('modalUmkm').classList.add('hidden'); document.getElementById('modalUmkm').classList.remove('flex'); }
 
-    function openModalQris() { 
-      document.getElementById('modalQris').classList.remove('hidden'); 
-      document.getElementById('modalQris').classList.add('flex'); 
-    }
-    
-    function closeModalQris() { 
-      document.getElementById('modalQris').classList.add('hidden'); 
-      document.getElementById('modalQris').classList.remove('flex'); 
-    }
+    function openModalQris() { document.getElementById('modalQris').classList.remove('hidden'); document.getElementById('modalQris').classList.add('flex'); }
+    function closeModalQris() { document.getElementById('modalQris').classList.add('hidden'); document.getElementById('modalQris').classList.remove('flex'); }
 
     function switchTab(tab) {
       document.getElementById('tab-home').classList.toggle('hidden', tab !== 'home');
