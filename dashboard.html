@@ -48,7 +48,7 @@
       <!-- HEADER UPPER BAR -->
       <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow">
+          <div id="avatarHeader" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg shadow overflow-hidden">
             <i class="fa-solid fa-user"></i>
           </div>
           <div>
@@ -103,63 +103,45 @@
           <div class="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-3">
             <h2 class="text-sm font-bold text-gray-800 tracking-wide">Layanan & Ekosistem</h2>
             <div class="grid grid-cols-4 gap-4 text-center">
-              
               <button onclick="switchTab('saldo')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-wallet"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-wallet"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Kas & Transaksi</span>
               </button>
 
               <button onclick="switchTab('umkm')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-store"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl group-hover:bg-emerald-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-store"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Grup UMKM</span>
               </button>
 
               <button onclick="openModalSolidaritas()" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-hand-holding-dollar"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Kas Solidaritas</span>
               </button>
 
               <button onclick="switchTab('event')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-calendar-day"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-calendar-day"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Event & Agenda</span>
               </button>
 
               <button onclick="switchTab('profil')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-id-card"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-id-card"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Profil Anggota</span>
               </button>
 
               <button onclick="alert('Form Donasi & Bantuan Ekosistem!')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-heart-circle-check"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl group-hover:bg-rose-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-heart-circle-check"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Donasi</span>
               </button>
 
               <button onclick="alert('Direktori Mitra / Partner!')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-handshake"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-handshake"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Cari Partner</span>
               </button>
 
               <button onclick="alert('Pusat Bantuan WhatsApp!')" class="flex flex-col items-center group">
-                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl group-hover:bg-sky-600 group-hover:text-white transition shadow-sm mb-1.5">
-                  <i class="fa-solid fa-headset"></i>
-                </div>
+                <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl group-hover:bg-sky-600 group-hover:text-white transition shadow-sm mb-1.5"><i class="fa-solid fa-headset"></i></div>
                 <span class="text-xs text-gray-700 font-medium">Bantuan</span>
               </button>
-
             </div>
           </div>
 
@@ -215,7 +197,7 @@
           </div>
         </div>
 
-        <!-- TAB 4: EVENT & AGENDA (FASE 4) -->
+        <!-- TAB 4: EVENT & AGENDA -->
         <div id="tab-event" class="hidden space-y-6">
           <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-4">
             <div class="border-b pb-4">
@@ -228,31 +210,77 @@
           </div>
         </div>
 
-        <!-- TAB 5: PROFIL ANGGOTA -->
+        <!-- TAB 5: PROFIL ANGGOTA LENGKAP -->
         <div id="tab-profil" class="hidden bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
-          <div class="border-b border-gray-100 pb-4">
-            <h3 class="text-lg font-bold text-gray-800">Profil Keanggotaan</h3>
-            <p class="text-xs text-gray-500">Perbarui informasi identitas Anda</p>
+          <div class="border-b border-gray-100 pb-4 flex items-center space-x-4">
+            <div id="profilePhotoPreview" class="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-600 text-blue-600 flex items-center justify-center text-2xl font-bold overflow-hidden shadow">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">Profil Keanggotaan & Identitas</h3>
+              <p class="text-xs text-gray-500">Lengkapi data legalitas & verifikasi keanggotaan Anda</p>
+            </div>
           </div>
 
-          <form id="formProfil" class="space-y-4 max-w-lg">
+          <form id="formProfil" class="space-y-4 max-w-xl">
+            <!-- FOTO PROFIL -->
             <div>
-              <label class="block text-xs font-semibold text-gray-500 mb-1">Email Terdaftar</label>
-              <input type="text" id="profEmail" readonly class="w-full bg-gray-50 border rounded-xl px-4 py-2.5 text-sm text-gray-500">
+              <label class="block text-xs font-semibold text-gray-500 mb-1">URL / Link Foto Profil</label>
+              <input type="url" id="profFotoUrl" placeholder="https://domain.com/foto.jpg" class="w-full border rounded-xl px-4 py-2.5 text-sm">
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lengkap</label>
-              <input type="text" id="profNama" required placeholder="Masukkan Nama Lengkap" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+
+            <!-- NAMA & EMAIL -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Email Terdaftar</label>
+                <input type="text" id="profEmail" readonly class="w-full bg-gray-50 border rounded-xl px-4 py-2.5 text-sm text-gray-500">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nama Lengkap</label>
+                <input type="text" id="profNama" required placeholder="Nama sesuai KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor WhatsApp / HP</label>
-              <input type="text" id="profHp" placeholder="081234567890" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+
+            <!-- WA & BISNIS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor WhatsApp / HP</label>
+                <input type="text" id="profHp" placeholder="081234567890" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Pekerjaan / Bidang Bisnis</label>
+                <input type="text" id="profBisnis" placeholder="Contoh: Driver / UMKM Kuliner" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
             </div>
-            <div>
-              <label class="block text-xs font-semibold text-gray-500 mb-1">Pekerjaan / Bidang Bisnis</label>
-              <input type="text" id="profBisnis" placeholder="Contoh: Driver / UMKM Kuliner" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+
+            <hr class="my-4 border-gray-100">
+            <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Verifikasi Identitas & Dokumen</h4>
+
+            <!-- KTP & SKCK -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor KTP (NIK)</label>
+                <input type="text" id="profKtp" placeholder="16 Digit NIK KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor SKCK</label>
+                <input type="text" id="profSkck" placeholder="Nomor Surat SKCK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
             </div>
-            <button type="submit" class="bg-blue-600 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition">Simpan Profil</button>
+
+            <!-- BPJS TK & BPJS KES -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Ketenagakerjaan</label>
+                <input type="text" id="profBpjsTk" placeholder="Nomor Kartu BPJS TK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">BPJS Kesehatan</label>
+                <input type="text" id="profBpjsKes" placeholder="Nomor Kartu BPJS Kesehatan" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <button type="submit" class="bg-blue-600 text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-blue-700 transition">Simpan Semua Data Profil</button>
           </form>
         </div>
       </main>
@@ -376,6 +404,17 @@
         document.getElementById('profNama').value = data.nama_lengkap || '';
         document.getElementById('profHp').value = data.no_hp || '';
         document.getElementById('profBisnis').value = data.pekerjaan_bisnis || '';
+        document.getElementById('profKtp').value = data.no_ktp || '';
+        document.getElementById('profSkck').value = data.no_skck || '';
+        document.getElementById('profBpjsTk').value = data.bpjs_tk || '';
+        document.getElementById('profBpjsKes').value = data.bpjs_kes || '';
+        document.getElementById('profFotoUrl').value = data.foto_url || '';
+
+        if (data.foto_url) {
+          const imgHtml = `<img src="${data.foto_url}" class="w-full h-full object-cover rounded-full">`;
+          document.getElementById('avatarHeader').innerHTML = imgHtml;
+          document.getElementById('profilePhotoPreview').innerHTML = imgHtml;
+        }
       }
     }
 
@@ -386,9 +425,15 @@
         nama_lengkap: document.getElementById('profNama').value,
         no_hp: document.getElementById('profHp').value,
         pekerjaan_bisnis: document.getElementById('profBisnis').value,
+        no_ktp: document.getElementById('profKtp').value,
+        no_skck: document.getElementById('profSkck').value,
+        bpjs_tk: document.getElementById('profBpjsTk').value,
+        bpjs_kes: document.getElementById('profBpjsKes').value,
+        foto_url: document.getElementById('profFotoUrl').value,
         updated_at: new Date()
       });
-      if (!error) { alert("Profil disimpan!"); loadProfile(); }
+      if (!error) { alert("Data profil & identitas berhasil disimpan!"); loadProfile(); }
+      else { alert("Gagal menyimpan profil: " + error.message); }
     });
 
     async function loadTransactions() {
@@ -444,11 +489,9 @@
     }
 
     async function loadEvents() {
-      // Fetch pendaftaran user dulu
       const { data: regData } = await _supabase.from('event_registrations').select('event_id').eq('user_id', currentUser.id);
       userRegistrations = regData ? regData.map(r => r.event_id) : [];
 
-      // Fetch daftar events
       const { data, error } = await _supabase.from('events').select('*').order('tanggal', { ascending: true });
       if (error) return;
 
