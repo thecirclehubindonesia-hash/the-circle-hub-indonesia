@@ -78,7 +78,7 @@
           <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 rounded-2xl p-5 text-white shadow-lg space-y-4">
             <div class="flex justify-between items-center">
               <div>
-                <p class="text-blue-200 text-xs font-medium">Saldo Kas Anggota</p>
+                <p class="text-blue-200 text-xs font-medium">Saldo Utama Anggota</p>
                 <h3 class="text-3xl font-extrabold tracking-tight" id="totalSaldoDisplay">Rp 0</h3>
               </div>
               <div class="bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/20 text-xs text-blue-100 flex items-center space-x-1">
@@ -128,7 +128,7 @@
                 <div>
                   <p class="text-xs text-gray-500">Nominal Iuran Pokok</p>
                   <p class="text-lg font-extrabold text-gray-800">Rp 10.000 <span class="text-xs font-normal text-gray-500">/ hari</span></p>
-                  <p class="text-[11px] text-emerald-600 font-medium">+10 Poin Komunitas per pembayaran</p>
+                  <p class="text-[11px] text-emerald-600 font-medium">Potong Saldo Utama & +10 Poin</p>
                 </div>
               </div>
               <button id="btnBayarIuranCepat" onclick="bayarIuranHarianCepat()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-5 py-3 rounded-xl transition shadow-md flex items-center justify-center space-x-2">
@@ -412,7 +412,6 @@
 
       <p class="text-xs text-gray-500">Arahkan kamera HP/Laptop Anda ke QR Code atau Barcode anggota.</p>
       
-      <!-- WADAH KAMERA -->
       <div class="bg-black rounded-2xl overflow-hidden border-2 border-blue-500 shadow-md">
         <div id="reader" class="w-full"></div>
       </div>
@@ -425,7 +424,7 @@
     </div>
   </div>
 
-  <!-- MODAL QRIS RESMI THE CIRCLE HUB INDONESIA (URL SUPABASE STORAGE) -->
+  <!-- MODAL QRIS RESMI THE CIRCLE HUB INDONESIA -->
   <div id="modalQris" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
@@ -435,12 +434,11 @@
 
       <p class="text-xs text-gray-500">Scan QRIS resmi di bawah ini menggunakan e-Wallet (Gopay, OVO, Dana, ShopeePay) atau M-Banking Anda.</p>
       
-      <!-- GAMBAR QRIS DENGAN LINK URL SUPABASE STORAGE -->
       <div class="p-2 bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden shadow-inner flex justify-center">
         <img src="https://btkmwasloxwrwmffthsu.supabase.co/storage/v1/object/public/qris.jpeg/qris.jpeg.jpeg" alt="QRIS Resmi The Circle Hub Indonesia" class="w-full max-w-[280px] h-auto rounded-xl shadow-sm object-contain">
       </div>
 
-      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer selesai, catat transaksi di menu Kas atau konfirmasi via WhatsApp Pengurus.</p>
+      <p class="text-[11px] text-blue-600 font-medium">Setelah transfer selesai, kirim bukti ke Admin untuk penyesuaian Saldo Utama.</p>
 
       <div class="flex space-x-2 pt-1">
         <button onclick="closeModalQris()" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 rounded-xl font-bold text-xs transition">Tutup</button>
@@ -456,6 +454,7 @@
     let userRegistrations = [];
     let currentFotoUrl = "";
     let currentPoin = 100;
+    let currentSaldoUtama = 0;
     let allUserTransactions = [];
     let html5QrcodeScanner = null;
 
@@ -560,7 +559,7 @@
       if (error) return;
 
       allUserTransactions = data || [];
-      let total = 0;
+      currentSaldoUtama = 0;
       let html = '';
 
       if (allUserTransactions.length === 0) {
@@ -568,8 +567,8 @@
       } else {
         allUserTransactions.forEach(tx => {
           const isMasuk = tx.tipe === 'masuk';
-          if (isMasuk) total += Number(tx.jumlah);
-          else total -= Number(tx.jumlah);
+          if (isMasuk) currentSaldoUtama += Number(tx.jumlah);
+          else currentSaldoUtama -= Number(tx.jumlah);
 
           html += `
             <tr>
@@ -581,7 +580,7 @@
         });
       }
 
-      document.getElementById('totalSaldoDisplay').innerText = `Rp ${total.toLocaleString('id-ID')}`;
+      document.getElementById('totalSaldoDisplay').innerText = `Rp ${currentSaldoUtama.toLocaleString('id-ID')}`;
       document.getElementById('transactionList').innerHTML = html;
 
       renderIuranTracker();
@@ -629,10 +628,17 @@
       }
     }
 
+    // SYSTEM PEMBAYARAN IURAN: POTONG SALDO UTAMA
     async function bayarIuranHarianCepat() {
+      if (currentSaldoUtama < 10000) {
+        alert("Saldo Utama tidak mencukupi (Minimal Rp 10.000). Silakan lakukan Top Up terlebih dahulu!");
+        openModalQris();
+        return;
+      }
+
       const { error: txErr } = await _supabase.from('transaksi').insert([{
         user_id: currentUser.id,
-        tipe: 'masuk',
+        tipe: 'keluar',
         keterangan: 'Iuran Sukarela Harian (Rp 10.000)',
         jumlah: 10000
       }]);
@@ -649,7 +655,7 @@
         updated_at: new Date()
       });
 
-      alert("Terima kasih! Iuran harian Rp 10.000 berhasil terbayar. Anda mendapatkan +10 Poin!");
+      alert("Pembayaran Iuran Harian Rp 10.000 Berhasil! Saldo Utama dipotong dan Anda mendapatkan +10 Poin.");
       loadProfile();
       loadTransactions();
     }
@@ -715,8 +721,13 @@
     document.getElementById('formTransfer').addEventListener('submit', async (e) => {
       e.preventDefault();
       const tujuan = document.getElementById('trfTujuan').value;
-      const jumlah = document.getElementById('trfJumlah').value;
+      const jumlah = Number(document.getElementById('trfJumlah').value);
       const catatan = document.getElementById('trfCatatan').value;
+
+      if (currentSaldoUtama < jumlah) {
+        alert("Saldo Utama Anda tidak mencukupi untuk melakukan transfer ini!");
+        return;
+      }
 
       const { error } = await _supabase.from('transaksi').insert([{
         user_id: currentUser.id,
@@ -726,7 +737,7 @@
       }]);
 
       if (!error) {
-        alert("Transfer saldo sebesar Rp " + Number(jumlah).toLocaleString('id-ID') + " berhasil dikirim!");
+        alert("Transfer sebesar Rp " + jumlah.toLocaleString('id-ID') + " berhasil diproses!");
         closeModalTransfer();
         loadTransactions();
       } else {
