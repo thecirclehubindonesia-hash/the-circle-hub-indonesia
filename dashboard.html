@@ -213,20 +213,30 @@
         <!-- TAB 5: PROFIL ANGGOTA LENGKAP -->
         <div id="tab-profil" class="hidden bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-6">
           <div class="border-b border-gray-100 pb-4 flex items-center space-x-4">
-            <div id="profilePhotoPreview" class="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-600 text-blue-600 flex items-center justify-center text-2xl font-bold overflow-hidden shadow">
-              <i class="fa-solid fa-user"></i>
+            <div class="relative">
+              <div id="profilePhotoPreview" class="w-20 h-20 rounded-full bg-blue-100 border-2 border-blue-600 text-blue-600 flex items-center justify-center text-3xl font-bold overflow-hidden shadow">
+                <i class="fa-solid fa-user"></i>
+              </div>
             </div>
             <div>
               <h3 class="text-lg font-bold text-gray-800">Profil Keanggotaan & Identitas</h3>
-              <p class="text-xs text-gray-500">Lengkapi data legalitas & verifikasi keanggotaan Anda</p>
+              <p class="text-xs text-gray-500">Upload foto profil & lengkapi verifikasi identitas Anda</p>
             </div>
           </div>
 
           <form id="formProfil" class="space-y-4 max-w-xl">
-            <!-- FOTO PROFIL -->
-            <div>
-              <label class="block text-xs font-semibold text-gray-500 mb-1">URL / Link Foto Profil</label>
-              <input type="url" id="profFotoUrl" placeholder="https://domain.com/foto.jpg" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+            
+            <!-- UPLOAD FOTO PROFIL LANGSUNG -->
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700">Foto Profil Anggota</label>
+                <p class="text-[11px] text-gray-500">Pilih foto dari HP/Laptop (Format JPG/PNG)</p>
+              </div>
+              <label class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center space-x-2">
+                <i class="fa-solid fa-camera"></i>
+                <span>Pilih Foto</span>
+                <input type="file" id="inputFotoFile" accept="image/*" class="hidden" onchange="uploadFotoProfil(this)">
+              </label>
             </div>
 
             <!-- NAMA & EMAIL -->
@@ -382,6 +392,7 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let currentUser = null;
     let userRegistrations = [];
+    let currentFotoUrl = "";
 
     async function checkAuth() {
       const { data: { session } } = await _supabase.auth.getSession();
@@ -408,14 +419,49 @@
         document.getElementById('profSkck').value = data.no_skck || '';
         document.getElementById('profBpjsTk').value = data.bpjs_tk || '';
         document.getElementById('profBpjsKes').value = data.bpjs_kes || '';
-        document.getElementById('profFotoUrl').value = data.foto_url || '';
+        currentFotoUrl = data.foto_url || '';
 
-        if (data.foto_url) {
-          const imgHtml = `<img src="${data.foto_url}" class="w-full h-full object-cover rounded-full">`;
+        if (currentFotoUrl) {
+          const imgHtml = `<img src="${currentFotoUrl}" class="w-full h-full object-cover rounded-full">`;
           document.getElementById('avatarHeader').innerHTML = imgHtml;
           document.getElementById('profilePhotoPreview').innerHTML = imgHtml;
         }
       }
+    }
+
+    async function uploadFotoProfil(input) {
+      if (!input.files || input.files.length === 0) return;
+
+      const file = input.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Tampilkan indikator memuat
+      document.getElementById('profilePhotoPreview').innerHTML = `<i class="fa-solid fa-spinner fa-spin text-2xl"></i>`;
+
+      // Upload ke Supabase Storage Bucket 'avatars'
+      const { data, error } = await _supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
+
+      if (error) {
+        alert("Gagal upload foto: " + error.message);
+        loadProfile();
+        return;
+      }
+
+      // Ambil Public URL
+      const { data: urlData } = _supabase.storage.from('avatars').getPublicUrl(filePath);
+      currentFotoUrl = urlData.publicUrl;
+
+      // Update kolom foto_url di tabel profiles
+      await _supabase.from('profiles').upsert({
+        id: currentUser.id,
+        foto_url: currentFotoUrl,
+        updated_at: new Date()
+      });
+
+      alert("Foto profil berhasil diperbarui!");
+      loadProfile();
     }
 
     document.getElementById('formProfil').addEventListener('submit', async (e) => {
@@ -429,7 +475,7 @@
         no_skck: document.getElementById('profSkck').value,
         bpjs_tk: document.getElementById('profBpjsTk').value,
         bpjs_kes: document.getElementById('profBpjsKes').value,
-        foto_url: document.getElementById('profFotoUrl').value,
+        foto_url: currentFotoUrl,
         updated_at: new Date()
       });
       if (!error) { alert("Data profil & identitas berhasil disimpan!"); loadProfile(); }
