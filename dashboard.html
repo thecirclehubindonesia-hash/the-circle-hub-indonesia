@@ -264,16 +264,28 @@
             </div>
 
             <hr class="my-4 border-gray-100">
-            <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Verifikasi Identitas & Dokumen</h4>
+            <h4 class="text-xs font-bold text-blue-600 uppercase tracking-wider">Verifikasi Identitas & Legalitas Dokumen</h4>
 
-            <!-- KTP & SKCK -->
+            <!-- KTP & KK -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor KTP (NIK)</label>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No KTP</label>
                 <input type="text" id="profKtp" placeholder="16 Digit NIK KTP" class="w-full border rounded-xl px-4 py-2.5 text-sm">
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-500 mb-1">Nomor SKCK</label>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No Kartu Keluarga</label>
+                <input type="text" id="profKk" placeholder="16 Digit Nomor KK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+            </div>
+
+            <!-- NPWP & SKCK -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No NPWP</label>
+                <input type="text" id="profNpwp" placeholder="Nomor NPWP Anggota" class="w-full border rounded-xl px-4 py-2.5 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 mb-1">No SKCK</label>
                 <input type="text" id="profSkck" placeholder="Nomor Surat SKCK" class="w-full border rounded-xl px-4 py-2.5 text-sm">
               </div>
             </div>
@@ -416,6 +428,8 @@
         document.getElementById('profHp').value = data.no_hp || '';
         document.getElementById('profBisnis').value = data.pekerjaan_bisnis || '';
         document.getElementById('profKtp').value = data.no_ktp || '';
+        document.getElementById('profKk').value = data.no_kk || '';
+        document.getElementById('profNpwp').value = data.no_npwp || '';
         document.getElementById('profSkck').value = data.no_skck || '';
         document.getElementById('profBpjsTk').value = data.bpjs_tk || '';
         document.getElementById('profBpjsKes').value = data.bpjs_kes || '';
@@ -437,10 +451,8 @@
       const fileName = `${currentUser.id}-${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      // Tampilkan indikator memuat
       document.getElementById('profilePhotoPreview').innerHTML = `<i class="fa-solid fa-spinner fa-spin text-2xl"></i>`;
 
-      // Upload ke Supabase Storage Bucket 'avatars'
       const { data, error } = await _supabase.storage.from('avatars').upload(filePath, file, { upsert: true });
 
       if (error) {
@@ -449,11 +461,9 @@
         return;
       }
 
-      // Ambil Public URL
       const { data: urlData } = _supabase.storage.from('avatars').getPublicUrl(filePath);
       currentFotoUrl = urlData.publicUrl;
 
-      // Update kolom foto_url di tabel profiles
       await _supabase.from('profiles').upsert({
         id: currentUser.id,
         foto_url: currentFotoUrl,
@@ -472,6 +482,8 @@
         no_hp: document.getElementById('profHp').value,
         pekerjaan_bisnis: document.getElementById('profBisnis').value,
         no_ktp: document.getElementById('profKtp').value,
+        no_kk: document.getElementById('profKk').value,
+        no_npwp: document.getElementById('profNpwp').value,
         no_skck: document.getElementById('profSkck').value,
         bpjs_tk: document.getElementById('profBpjsTk').value,
         bpjs_kes: document.getElementById('profBpjsKes').value,
